@@ -5,7 +5,7 @@ const SUPABASE_URL = 'https://viwjlxtxhpjlrijpnjcl.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_2hXR0A_7bJp6qyGAtD5aLw_oFufu2Lq';
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRsyohH9YA6FFtXPNjVxIK0ATOUpJwmSFNGbsoPdJu0rNs1TGrCzYKnTfawEuG1L8qAA/exec'; // Coloque a URL do Code.gs aqui
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ==========================================
 // LÓGICA DE DATAS E TABELAS
@@ -21,9 +21,9 @@ function setupDateAndTable() {
     const dia2Date = new Date('2026-08-24T00:00:00');
 
     if (today < dia2Date) {
-        currentTable = "natalhair2026 dia 1";
+        currentTable = "natalhair2026_dia_1";
     } else {
-        currentTable = "natalhair2026 dia 2";
+        currentTable = "natalhair2026_dia_2";
     }
 
     document.getElementById('current-table-display').textContent = `Registrando na tabela: ${currentTable}`;
@@ -68,7 +68,7 @@ async function loadCheckedInUsers() {
     container.innerHTML = "<p>Carregando...</p>";
 
     // 1. Pega os CPFs que já fizeram check-in hoje
-    const { data: checkins, error: errCheckin } = await supabase.from(currentTable).select('cpfEvento');
+    const { data: checkins, error: errCheckin } = await supabaseClient.from(currentTable).select('cpfEvento');
     if (errCheckin || !checkins.length) {
         container.innerHTML = "<p>Nenhum check-in registrado hoje.</p>";
         return;
@@ -77,7 +77,7 @@ async function loadCheckedInUsers() {
     const cpfsList = checkins.map(c => c.cpfEvento);
 
     // 2. Busca os dados desses CPFs na tabela users
-    const { data: users, error: errUsers } = await supabase.from('users').select('*').in('cpf', cpfsList);
+    const { data: users, error: errUsers } = await supabaseClient.from('users').select('*').in('cpf', cpfsList);
     if (errUsers) {
         container.innerHTML = "<p>Erro ao carregar dados dos usuários.</p>";
         return;
@@ -116,7 +116,7 @@ async function processCheckIn(rawCode, isManual = false) {
     feedback.textContent = "Verificando no banco de dados...";
 
     // Verifica se já está no evento HOJE
-    const { data: existing, error: errCheck } = await supabase
+    const { data: existing, error: errCheck } = await supabaseClient
         .from(currentTable)
         .select('cpfEvento')
         .eq('cpfEvento', code);
@@ -129,7 +129,7 @@ async function processCheckIn(rawCode, isManual = false) {
     }
 
     // Registra Check-in
-    const { error: errInsert } = await supabase
+    const { error: errInsert } = await supabaseClient
         .from(currentTable)
         .insert([{ cpfEvento: code }]);
 
