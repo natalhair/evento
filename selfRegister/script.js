@@ -26,7 +26,7 @@ if (!form || !submitBtn) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault(); 
         
-        // Coleta dados (já corrigido para 'numberphone')
+        // Coleta dados
         const rawCpf = document.getElementById('cpf').value;
         const rawName = document.getElementById('fullname').value;
         const rawPhone = document.getElementById('numberphone').value; 
@@ -40,13 +40,15 @@ if (!form || !submitBtn) {
 
         // Validações
         const isDocValid = (cpf.length === 11 || cpf.length === 14);
-        const isNameValid = rawName.trim().split(/\s+/).length >= 2 && rawName.trim().split(/\s+/).every(w => w.length >= 3);
+        // CORREÇÃO: Mínimo 2 letras por palavra
+        const isNameValid = rawName.trim().split(/\s+/).length >= 2 && rawName.trim().split(/\s+/).every(w => w.length >= 2);
         const isPhoneValid = (phoneDigits.length === 11 && phoneDigits.charAt(2) === '9');
 
         // Exibe/Oculta erros na tela
         document.getElementById('error-cpf').style.display = !isDocValid ? 'block' : 'none';
         document.getElementById('error-name').style.display = !isNameValid ? 'block' : 'none';
-        document.getElementById('error-phone').style.display = !isPhoneValid ? 'block' : 'none';
+        // CORREÇÃO: ID do erro ajustado para 'error-numberphone'
+        document.getElementById('error-numberphone').style.display = !isPhoneValid ? 'block' : 'none';
         document.getElementById('global-error').style.display = 'none';
 
         if (!isDocValid || !isNameValid || !isPhoneValid) {
