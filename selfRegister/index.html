@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Natal Hair 2026</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <main class="container">
+        <header class="header">
+            <img src="../logo.png" alt="Natal Hair Logo" class="logo">
+            <h1>Cadastro de Participante</h1>
+        </header>
+
+        <section id="registration-section">
+            <form id="register-form">
+                <div class="input-group">
+                    <label for="cpf">CPF ou CNPJ</label>
+                    <input type="text" id="cpf" placeholder="Apenas números (11 ou 14 dígitos)" required>
+                    <span class="error-msg" id="error-cpf">Digite 11 (CPF) ou 14 (CNPJ) números.</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="fullname">Nome Completo</label>
+                    <input type="text" id="fullname" placeholder="Ex: Maria da Silva" required>
+                    <span class="error-msg" id="error-name">Insira pelo menos nome e sobrenome (min. 3 letras cada).</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="phone">Número de Telefone</label>
+                    <div class="phone-input-wrapper">
+                        <span class="prefix">+55</span>
+                        <input type="tel" id="phone" placeholder="84 9 0000 0000" required>
+                    </div>
+                    <span class="error-msg" id="error-phone">Insira o DDD + 9 + 8 dígitos.</span>
+                </div>
+
+                <div class="row">
+                    <div class="input-group city-group">
+                        <label for="city">Cidade</label>
+                        <input type="text" id="city" placeholder="Ex: Ceará-Mirim" required>
+                    </div>
+
+                    <div class="input-group uf-group">
+                        <label for="uf">UF</label>
+                        <select id="uf" required>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN" selected>RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn">Realizar Cadastro</button>
+                <div id="global-error" class="error-msg global-error">Erro ao conectar com o banco de dados.</div>
+            </form>
+        </section>
+
+        <section id="success-section" class="hidden">
+            <h2>Cadastro Concluído!</h2>
+            <p>Seu ingresso foi gerado com sucesso.</p>
+            
+            <div class="qr-container">
+                <div id="qrcode"></div>
+            </div>
+
+            <button id="download-btn" class="secondary-btn">Baixar meu ingresso virtual</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
