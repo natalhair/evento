@@ -4,18 +4,8 @@
 const SUPABASE_URL = 'https://viwjlxtxhpjlrijpnjcl.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_2hXR0A_7bJp6qyGAtD5aLw_oFufu2Lq';
 
-let supabase; // ÚNICA declaração da variável no arquivo inteiro
-
-try {
-    if (!window.supabase) {
-        throw new Error("A biblioteca do Supabase não foi carregada pelo CDN no HTML.");
-    }
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log("Supabase inicializado com sucesso!");
-} catch (error) {
-    console.error("Erro crítico na inicialização:", error);
-    alert("Erro de configuração: " + error.message);
-}
+// Mudamos o nome de 'supabase' para 'supabaseClient' para evitar conflito com o CDN
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ==========================================
 // ELEMENTOS DO DOM
@@ -27,27 +17,19 @@ const submitBtn = document.getElementById('submit-btn');
 const downloadBtn = document.getElementById('download-btn');
 const qrcodeDiv = document.getElementById('qrcode');
 
-// Valida se os elementos existem antes de rodar o código
 if (!form || !submitBtn) {
-    console.error("Erro: Elementos do formulário não foram encontrados no DOM. Verifique os IDs no HTML.");
+    console.error("Erro: Elementos do formulário não encontrados. Verifique os IDs no HTML.");
 } else {
     // ==========================================
     // SUBMISSÃO DO FORMULÁRIO
     // ==========================================
     form.addEventListener('submit', async (e) => {
-        // INTERCEPTA O RECARREGAMENTO DA PÁGINA (Precisa ser a 1ª linha)
         e.preventDefault(); 
-        console.log("Formulário interceptado. Iniciando validações...");
-
-        if (!supabase) {
-            alert("Não é possível cadastrar: O cliente do Supabase falhou.");
-            return;
-        }
         
-        // Coleta dados
+        // Coleta dados (já corrigido para 'numberphone')
         const rawCpf = document.getElementById('cpf').value;
         const rawName = document.getElementById('fullname').value;
-        const rawPhone = document.getElementById('numberphone').value;
+        const rawPhone = document.getElementById('numberphone').value; 
         const city = document.getElementById('city').value.trim();
         const uf = document.getElementById('uf').value;
 
@@ -68,7 +50,6 @@ if (!form || !submitBtn) {
         document.getElementById('global-error').style.display = 'none';
 
         if (!isDocValid || !isNameValid || !isPhoneValid) {
-            console.warn("Validação falhou. Usuário precisa corrigir os campos.");
             return;
         }
 
@@ -76,9 +57,8 @@ if (!form || !submitBtn) {
         submitBtn.disabled = true;
 
         try {
-            console.log("Enviando para o Supabase...", { cpf, fullname: rawName.trim(), numberphone: finalPhone, city, uf });
-            
-            const { data, error } = await supabase
+            // Usamos 'supabaseClient' em vez de 'supabase' aqui!
+            const { data, error } = await supabaseClient
                 .from('users')
                 .insert([
                     { 
@@ -92,11 +72,10 @@ if (!form || !submitBtn) {
 
             if (error) throw error;
 
-            console.log("Salvo no banco com sucesso! Chamando gerador de ingresso...");
             gerarIngresso(cpf, rawName.trim(), city, uf);
             
         } catch (err) {
-            console.error('Erro retornado pelo Supabase:', err);
+            console.error('Erro no banco:', err);
             document.getElementById('global-error').textContent = `Erro: ${err.message || 'Verifique duplicidade de documento.'}`;
             document.getElementById('global-error').style.display = 'block';
             submitBtn.textContent = 'Realizar Cadastro';
