@@ -156,3 +156,64 @@ button:active { transform: scale(0.98); }
     display: inline-block;
     margin-bottom: 25px;
 }
+/* ==========================================
+   RESPONSIVIDADE MOBILE (Telas até 480px)
+   ========================================== */
+@media (max-width: 480px) {
+    body {
+        padding: 10px; /* Reduz a distância do container para as bordas do celular */
+    }
+
+    .container {
+        padding: 25px 20px; /* Reduz o padding interno, dando muito mais espaço para os inputs */
+        max-width: 100%;
+    }
+
+    .header {
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        max-width: 140px; /* Reduz levemente a logo em telas pequenas */
+    }
+
+    h1 {
+        font-size: 1.25rem; /* Ajusta o título para não quebrar muitas linhas */
+    }
+
+    /* Corrige o vazamento da Cidade e UF */
+    .row {
+        flex-direction: column; /* Transforma o layout lado a lado em empilhado */
+        gap: 0; /* Reseta o espaçamento horizontal do flex */
+    }
+
+    .city-group, 
+    .uf-group {
+        flex: none;
+        width: 100%; /* Força ambos os campos a assumirem a largura total interna */
+    }
+
+    .city-group {
+        margin-bottom: 20px; /* Cria o espaçamento inferior antes do campo UF */
+    }
+
+    /* Força a segurança de largura em todos os elementos de entrada */
+    input, 
+    select, 
+    .phone-input-wrapper {
+        width: 100% !important;
+        max-width: 100%;
+    }
+
+    /* Ajusta o tamanho do QR Code gerado para caber em telas como iPhone SE */
+    .qr-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .qr-container canvas,
+    .qr-container img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+}
