@@ -7,53 +7,71 @@
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 <body>
-    <div class="background-overlay"></div>
-    
-    <main class="container">
-        <header class="header">
-            <img src="../logo.png" alt="Natal Hair Logo" class="logo">
-            <h1>Recepção & Check-in</h1>
-            <p id="current-date" class="date-display"></p>
+    <section id="login-section" class="container">
+        <img src="../logo.png" alt="Natal Hair Logo" class="logo">
+        <h2>Acesso Administrativo</h2>
+        <div class="input-group">
+            <input type="password" id="admin-password" placeholder="Digite a senha de acesso" required>
+        </div>
+        <button id="login-btn">Entrar</button>
+        <div id="login-error" class="error-msg">Senha incorreta ou erro de conexão.</div>
+    </section>
+
+    <main id="dashboard-section" class="hidden">
+        <header class="dash-header">
+            <img src="../logo.png" alt="Natal Hair Logo" class="logo-small">
+            <h1 id="current-date-display">Data Atual</h1>
+            <h2 id="current-table-display" class="table-badge">Buscando tabela...</h2>
         </header>
 
-        <section class="action-section">
-            <button id="btn-start-scan" class="primary-btn">Escanear QR Code</button>
-            <button id="btn-fallback-form" class="secondary-btn">Não tem mais o QR Code</button>
-        </section>
+        <div class="action-bar">
+            <button id="open-scanner-btn" class="scan-btn">📷 Escanear QR Code</button>
+        </div>
 
-        <section id="scanner-section" class="hidden">
-            <div id="reader-wrapper">
-                <div id="reader"></div>
-                <div class="scanner-mask">
-                    <div class="scanner-target"></div>
-                </div>
-            </div>
-            <button id="btn-stop-scan" class="danger-btn">Cancelar Leitura</button>
-        </section>
-
-        <section id="fallback-section" class="hidden">
-            <div class="input-group">
-                <label for="manual-cpf">Digitar CPF ou CNPJ (Apenas números)</label>
-                <input type="text" id="manual-cpf" placeholder="11 ou 14 dígitos">
-            </div>
-            <button id="btn-submit-manual" class="primary-btn">Confirmar Entrada</button>
-        </section>
-
-        <div id="status-message" class="status-msg hidden"></div>
-
-        <section class="list-section">
-            <h2>Credenciados Hoje</h2>
-            <div id="checkin-list" class="cards-container">
+        <section class="user-list">
+            <h3>Participantes no evento (Hoje)</h3>
+            <div id="cards-container" class="cards-grid">
                 </div>
         </section>
-        
-        <div id="hidden-qrcode" class="hidden"></div>
     </main>
+
+    <div id="scanner-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-scanner-btn" class="close-btn">X</button>
+            <h2>Leitura de Ingresso</h2>
+            
+            <div class="camera-wrapper">
+                <div id="reader"></div>
+                <div class="scanner-overlay">
+                    <div class="scanner-frame"></div>
+                </div>
+            </div>
+
+            <p id="scanner-feedback" class="feedback-msg"></p>
+
+            <button id="manual-entry-btn" class="secondary-btn">Não tem mais o QR Code?</button>
+        </div>
+    </div>
+
+    <div id="manual-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-manual-btn" class="close-btn">X</button>
+            <h2>Entrada Manual</h2>
+            <div class="input-group">
+                <label>CPF ou CNPJ</label>
+                <input type="text" id="manual-cpf" placeholder="Apenas números">
+            </div>
+            <button id="submit-manual-btn">Registrar Check-in</button>
+            <p id="manual-feedback" class="feedback-msg"></p>
+        </div>
+    </div>
+
+    <div id="hidden-qrcode" class="hidden"></div>
 
     <script src="qrcode.js"></script>
     <script src="chekin.js"></script>
