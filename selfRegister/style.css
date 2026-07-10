@@ -87,7 +87,7 @@ input::placeholder { color: rgba(255, 255, 255, 0.3); }
 
 input:focus, select:focus { border-color: var(--red-vivid); }
 
-.phone-input-wrapper {
+.numberphone-input-wrapper {
     display: flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.05);
@@ -96,7 +96,7 @@ input:focus, select:focus { border-color: var(--red-vivid); }
     transition: border-color 0.3s ease;
 }
 
-.phone-input-wrapper:focus-within { border-color: var(--red-vivid); }
+.numberphone-input-wrapper:focus-within { border-color: var(--red-vivid); }
 
 .prefix {
     padding: 12px;
@@ -104,7 +104,7 @@ input:focus, select:focus { border-color: var(--red-vivid); }
     border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.phone-input-wrapper input {
+.numberphone-input-wrapper input {
     border: none;
     background: transparent;
     flex: 1;
@@ -200,7 +200,7 @@ button:active { transform: scale(0.98); }
     /* Força a segurança de largura em todos os elementos de entrada */
     input, 
     select, 
-    .phone-input-wrapper {
+    .numberphone-input-wrapper {
         width: 100% !important;
         max-width: 100%;
     }
