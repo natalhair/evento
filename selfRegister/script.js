@@ -47,7 +47,7 @@ if (!form || !submitBtn) {
         // Coleta dados
         const rawCpf = document.getElementById('cpf').value;
         const rawName = document.getElementById('fullname').value;
-        const rawPhone = document.getElementById('phone').value;
+        const rawPhone = document.getElementById('numberphone').value;
         const city = document.getElementById('city').value.trim();
         const uf = document.getElementById('uf').value;
 
