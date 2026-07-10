@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-in - Natal Hair 2026</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <main class="container">
+        <header class="header">
+            <img src="../logo.png" alt="Natal Hair Logo" class="logo">
+            <h1>Recepção & Check-in</h1>
+            <p id="current-date" class="date-display"></p>
+        </header>
+
+        <section class="action-section">
+            <button id="btn-start-scan" class="primary-btn">Escanear QR Code</button>
+            <button id="btn-fallback-form" class="secondary-btn">Não tem mais o QR Code</button>
+        </section>
+
+        <section id="scanner-section" class="hidden">
+            <div id="reader-wrapper">
+                <div id="reader"></div>
+                <div class="scanner-mask">
+                    <div class="scanner-target"></div>
+                </div>
+            </div>
+            <button id="btn-stop-scan" class="danger-btn">Cancelar Leitura</button>
+        </section>
+
+        <section id="fallback-section" class="hidden">
+            <div class="input-group">
+                <label for="manual-cpf">Digitar CPF ou CNPJ (Apenas números)</label>
+                <input type="text" id="manual-cpf" placeholder="11 ou 14 dígitos">
+            </div>
+            <button id="btn-submit-manual" class="primary-btn">Confirmar Entrada</button>
+        </section>
+
+        <div id="status-message" class="status-msg hidden"></div>
+
+        <section class="list-section">
+            <h2>Credenciados Hoje</h2>
+            <div id="checkin-list" class="cards-container">
+                </div>
+        </section>
+        
+        <div id="hidden-qrcode" class="hidden"></div>
+    </main>
+
+    <script src="qrcode.js"></script>
+    <script src="chekin.js"></script>
+</body>
+</html>
