@@ -3,7 +3,6 @@
 // ==========================================
 const SUPABASE_URL = 'https://viwjlxtxhpjlrijpnjcl.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_2hXR0A_7bJp6qyGAtD5aLw_oFufu2Lq';
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRsyohH9YA6FFtXPNjVxIK0ATOUpJwmSFNGbsoPdJu0rNs1TGrCzYKnTfawEuG1L8qAA/exec'; // Coloque a URL do Code.gs aqui
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -30,7 +29,7 @@ function setupDateAndTable() {
 }
 
 // ==========================================
-// AUTENTICAÇÃO (Google Sheets)
+// AUTENTICAÇÃO 
 // ==========================================
 document.getElementById('login-btn').addEventListener('click', async () => {
     const inputPass = document.getElementById('admin-password').value;
@@ -40,21 +39,37 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     if (!inputPass) return;
 
     btn.textContent = "Verificando...";
-    try {
-        const response = await fetch(APPS_SCRIPT_URL);
-        const data = await response.json();
+    errorDiv.style.display = "none"; // Esconde erro anterior caso exista
 
-        if (data.status === "success" && data.senha === inputPass) {
+    try {
+        // Busca a senha na tabela 'adm'
+        // Como o ID muda, usamos o limit(1) para pegar a primeira linha da tabela
+        const { data, error } = await supabaseClient
+            .from('adm')
+            .select('senha')
+            .limit(1)
+            .single();
+
+        if (error) {
+            console.error("Erro no Supabase:", error);
+            throw new Error("Erro ao acessar o banco de dados.");
+        }
+
+        // Verifica se a senha do banco é igual à digitada
+        if (data && data.senha === inputPass) {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('dashboard-section').classList.remove('hidden');
-            document.body.style.display = 'block'; // Remove centralização do login
+            document.body.style.display = 'block'; 
+            
+            // Chama suas funções de inicialização
             setupDateAndTable();
             loadCheckedInUsers();
         } else {
+            errorDiv.textContent = "Senha incorreta.";
             errorDiv.style.display = "block";
         }
     } catch (err) {
-        errorDiv.textContent = "Erro de conexão com o servidor de senhas.";
+        errorDiv.textContent = "Erro de conexão: " + err.message;
         errorDiv.style.display = "block";
     }
     btn.textContent = "Entrar";
