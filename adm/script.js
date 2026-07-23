@@ -62,13 +62,11 @@ function renderizarTabela(tbodyId, dados) {
     dados.forEach(item => {
         const tr = document.createElement('tr');
         
-        // Aqui assumimos que você está salvando o código do ingresso concatenado na coluna que usávamos antes
-        // Se a coluna se chamar 'ingresso' no banco, use item.ingresso. Se for 'documento', use item.documento.
-        // Vou usar um fallback para tentar pegar o que estiver disponível
-        const identificacao = item.ingresso || item.documento || item.cpf || 'Não identificado';
+        // Agora busca especificamente o nome do participante
+        const nomeParticipante = item.name || 'Nome não registrado';
         
         tr.innerHTML = `
-            <td><strong>${identificacao}</strong></td>
+            <td><strong>${nomeParticipante}</strong></td>
             <td>${formatarDataHora(item.created_at)}</td>
         `;
         tbody.appendChild(tr);
@@ -101,13 +99,11 @@ function gerarPDF(titulo, dados, nomeArquivo) {
         return;
     }
 
-    // Inicializa o jsPDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Estilo do título no PDF
     doc.setFontSize(18);
-    doc.setTextColor(230, 0, 0); // Vermelho
+    doc.setTextColor(230, 0, 0); 
     doc.text("Natal Hair 2026", 14, 20);
     
     doc.setFontSize(12);
@@ -116,26 +112,24 @@ function gerarPDF(titulo, dados, nomeArquivo) {
     doc.text(`Total de registros: ${dados.length}`, 14, 34);
     doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 40);
 
-    // Prepara os dados para a tabela
+    // Mapeia os dados puxando o nome
     const bodyData = dados.map(item => {
-        const identificacao = item.ingresso || item.documento || item.cpf || 'Não identificado';
+        const nomeParticipante = item.name || 'Nome não registrado';
         return [
-            identificacao, 
+            nomeParticipante, 
             formatarDataHora(item.created_at)
         ];
     });
 
-    // Gera a tabela
     doc.autoTable({
         startY: 45,
-        head: [['Ingresso / Documento', 'Data e Hora do Check-in']],
+        head: [['Nome do Participante', 'Data e Hora do Check-in']], // Título alterado
         body: bodyData,
         theme: 'striped',
-        headStyles: { fillColor: [230, 0, 0] }, // Cabeçalho vermelho
+        headStyles: { fillColor: [230, 0, 0] }, 
         styles: { fontSize: 10 },
         alternateRowStyles: { fillColor: [245, 245, 245] }
     });
 
-    // Baixa o arquivo
     doc.save(nomeArquivo);
 }
