@@ -25,7 +25,7 @@ async function carregarDados() {
         // você poderia usar: .select('*, users(fullname)') para puxar o nome automaticamente
         const resDia1 = await supabaseClient
             .from('natalhair2026_dia_1')
-            .select('*')
+            .select('*, users(fullname)')
             .order('created_at', { ascending: false });
 
         if (!resDia1.error) {
@@ -37,7 +37,7 @@ async function carregarDados() {
         // Busca os dados do Dia 2
         const resDia2 = await supabaseClient
             .from('natalhair2026_dia_2')
-            .select('*')
+            .select('*, users(fullname)')
             .order('created_at', { ascending: false });
 
         if (!resDia2.error) {
