@@ -4,7 +4,7 @@
 const SUPABASE_URL = 'https://viwjlxtxhpjlrijpnjcl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_2hXR0A_7bJp6qyGAtD5aLw_oFufu2Lq';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Variáveis para armazenar os dados globais para o PDF
 let dadosDia1 = [];
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function carregarDados() {
     try {
         // Busca os dados do Dia 1
-        const resDia1 = await supabase
+        const resDia1 = await supabaseClient
             .from('natalhair2026_dia_1')
             .select('*')
             .order('created_at', { ascending: false });
@@ -33,7 +33,7 @@ async function carregarDados() {
         }
 
         // Busca os dados do Dia 2
-        const resDia2 = await supabase
+        const resDia2 = await supabaseClient
             .from('natalhair2026_dia_2')
             .select('*')
             .order('created_at', { ascending: false });
