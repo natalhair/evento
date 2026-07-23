@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
 async function carregarDados() {
     try {
         // Busca os dados do Dia 1
+        // Se você configurou a Foreign Key entre cpfEvento e users, 
+        // você poderia usar: .select('*, users(fullname)') para puxar o nome automaticamente
         const resDia1 = await supabaseClient
             .from('natalhair2026_dia_1')
             .select('*')
@@ -62,11 +64,12 @@ function renderizarTabela(tbodyId, dados) {
     dados.forEach(item => {
         const tr = document.createElement('tr');
         
-        // Agora busca especificamente o nome do participante
-        const nomeParticipante = item.name || 'Nome não registrado';
+        // Pega o nome do usuário. 
+        // Se usar Foreign Key, puxa de item.users.fullname. Senão, puxa da coluna 'name'.
+        const nomeUsuario = (item.users && item.users.fullname) ? item.users.fullname : (item.name || 'Nome não identificado');
         
         tr.innerHTML = `
-            <td><strong>${nomeParticipante}</strong></td>
+            <td><strong>${nomeUsuario}</strong></td>
             <td>${formatarDataHora(item.created_at)}</td>
         `;
         tbody.appendChild(tr);
@@ -99,11 +102,13 @@ function gerarPDF(titulo, dados, nomeArquivo) {
         return;
     }
 
+    // Inicializa o jsPDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    // Estilo do título no PDF
     doc.setFontSize(18);
-    doc.setTextColor(230, 0, 0); 
+    doc.setTextColor(230, 0, 0); // Vermelho
     doc.text("Natal Hair 2026", 14, 20);
     
     doc.setFontSize(12);
@@ -112,24 +117,26 @@ function gerarPDF(titulo, dados, nomeArquivo) {
     doc.text(`Total de registros: ${dados.length}`, 14, 34);
     doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 40);
 
-    // Mapeia os dados puxando o nome
+    // Prepara os dados para a tabela do PDF
     const bodyData = dados.map(item => {
-        const nomeParticipante = item.name || 'Nome não registrado';
+        const nomeUsuario = (item.users && item.users.fullname) ? item.users.fullname : (item.name || 'Nome não identificado');
         return [
-            nomeParticipante, 
+            nomeUsuario, 
             formatarDataHora(item.created_at)
         ];
     });
 
+    // Gera a tabela no PDF
     doc.autoTable({
         startY: 45,
-        head: [['Nome do Participante', 'Data e Hora do Check-in']], // Título alterado
+        head: [['Nome do Participante', 'Data e Hora do Check-in']],
         body: bodyData,
         theme: 'striped',
-        headStyles: { fillColor: [230, 0, 0] }, 
+        headStyles: { fillColor: [230, 0, 0] }, // Cabeçalho vermelho
         styles: { fontSize: 10 },
         alternateRowStyles: { fillColor: [245, 245, 245] }
     });
 
+    // Baixa o arquivo
     doc.save(nomeArquivo);
 }
