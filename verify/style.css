@@ -146,14 +146,11 @@ button:hover { background: #e60000; }
     z-index: 10;
 }
 
-/* Criamos a camada com blur usando ::before e fazemos um "furo" no meio dela */
 .scanner-overlay::before {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px); /* Suporte para iPhones/Safari */
     
     /* A mágica: desenha as bordas externas e corta um quadrado de 50px no centro */
     clip-path: polygon(
