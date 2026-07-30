@@ -1,44 +1,34 @@
-// ==========================================
-// MANIPULAÇÃO DO MENU SIDEBAR (HAMBÚRGUER)
-// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    const openSidebarBtn = document.getElementById("openSidebarBtn");
-    const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+    // Referências dos Elementos da Sidebar
+    const openMenuBtn = document.getElementById("open-menu");
+    const closeMenuBtn = document.getElementById("close-menu");
     const sidebar = document.getElementById("sidebar");
-    const sidebarOverlay = document.getElementById("sidebarOverlay");
-    const btnProgramacao = document.getElementById("btnProgramacao");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
 
-    // Função para abrir o menu
+    // Função para Abrir o Menu
     function openSidebar() {
-        sidebar.classList.add("open");
+        sidebar.classList.add("active");
         sidebarOverlay.classList.add("active");
-        document.body.style.overflow = "hidden"; // Impede scroll do fundo
+        document.body.style.overflow = "hidden"; // Previne scroll ao abrir menu
     }
 
-    // Função para fechar o menu
+    // Função para Fechar o Menu
     function closeSidebar() {
-        sidebar.classList.remove("open");
+        sidebar.classList.remove("active");
         sidebarOverlay.classList.remove("active");
-        document.body.style.overflow = ""; // Restaura scroll
+        document.body.style.overflow = "";
     }
 
-    // Eventos de clique
-    if (openSidebarBtn) openSidebarBtn.addEventListener("click", openSidebar);
-    if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
+    // Event Listeners
+    if (openMenuBtn) openMenuBtn.addEventListener("click", openSidebar);
+    if (closeMenuBtn) closeMenuBtn.addEventListener("click", closeSidebar);
     if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
-    // Fechar sidebar com a tecla ESC
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && sidebar.classList.contains("open")) {
+    // Fechar sidebar ao clicar em qualquer link de navegação
+    const navLinks = document.querySelectorAll(".sidebar-nav a");
+    navLinks.forEach(link => {
+        link.addEventListener("click", () => {
             closeSidebar();
-        }
-    });
-
-    // Redirecionamento do Botão de Programação
-    if (btnProgramacao) {
-        btnProgramacao.addEventListener("click", (e) => {
-            // Garante o redirecionamento dentro da mesma aba para a página de programação
-            window.location.href = "paginas/programacao.html";
         });
-    }
+    });
 });
