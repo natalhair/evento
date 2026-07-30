@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natal Hair - Beleza Sustentável</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- OVERLAY E SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Natal Hair" class="sidebar-logo">
+            <button class="close-sidebar-btn" id="closeSidebarBtn" aria-label="Fechar menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <h3>Navegue</h3>
+            <ul>
+                <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i> Página Inicial</a></li>
+                <li><a href="paginas/ingressos.html"><i class="fa-solid fa-ticket"></i> Ingressos</a></li>
+                <li><a href="paginas/caravanas.html"><i class="fa-solid fa-bus"></i> Caravanas</a></li>
+                <li><a href="paginas/embaixadoras.html"><i class="fa-solid fa-crown"></i> Embaixadoras</a></li>
+                <li><a href="paginas/seja-uma-embaixadora.html"><i class="fa-solid fa-star"></i> Seja uma embaixadora</a></li>
+                <li><a href="paginas/expositores.html"><i class="fa-solid fa-store"></i> Expositores</a></li>
+                <li><a href="paginas/seja-um-expositor.html"><i class="fa-solid fa-handshake"></i> Seja um expositor</a></li>
+                <li><a href="paginas/politica-de-privacidade.html"><i class="fa-solid fa-shield-halved"></i> Política de Privacidade</a></li>
+                <li><a href="paginas/cronograma.html"><i class="fa-solid fa-calendar-days"></i> Cronograma de atividades</a></li>
+                <li><a href="paginas/outros-eventos.html"><i class="fa-solid fa-calendar-plus"></i> Outros eventos</a></li>
+                <li><a href="paginas/nossa-equipe.html"><i class="fa-solid fa-users"></i> Nossa equipe</a></li>
+                <li><a href="paginas/nossa-historia.html"><i class="fa-solid fa-book-open"></i> Nossa história</a></li>
+                <li><a href="paginas/noticias.html"><i class="fa-solid fa-newspaper"></i> Notícias</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- CABEÇALHO DA PÁGINA -->
+    <header class="main-header">
+        <div class="top-bar">
+            <!-- Botão Hambúrguer em Círculo (Presente no Desktop e Mobile) -->
+            <button class="menu-circle-btn" id="openSidebarBtn" aria-label="Abrir Menu">
+                <div class="hamburger-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+
+            <!-- Logomarca Central -->
+            <div class="header-logo-container">
+                <a href="index.html">
+                    <img src="logo.png" alt="Natal Hair Logo" class="header-logo">
+                </a>
+                <span class="header-subtitle">BELEZA SUSTENTÁVEL</span>
+            </div>
+
+            <!-- Botão de Localização (Abre Google Maps) -->
+            <a href="https://maps.google.com/?q=Natal+Shopping+RN" target="_blank" rel="noopener noreferrer" class="location-btn">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>23 e 24 de agosto de 2026<br><strong>Natal Shopping</strong></span>
+            </a>
+        </div>
+
+        <!-- VÍDEO DO CABEÇALHO -->
+        <div class="header-video-container">
+            <video autoplay loop muted playsinline class="header-video">
+                <source src="assets/media/video.mp4" type="video/mp4">
+                Seu navegador não suporta vídeos HTML5.
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+    </header>
+
+    <!-- SEÇÃO PRINCIPAL / BANNER -->
+    <section class="hero-section">
+        <div class="container hero-content">
+            <h1 class="brand-title">NATAL HAIR</h1>
+            <p class="hero-description">
+                A maior feira de cosméticos do RN!, que traz grandes oportunidades para todos os profissionais no setor da beleza.
+            </p>
+            <div class="hero-actions">
+                <a href="paginas/expositores.html" class="btn btn-primary">CONHEÇA OS EXPOSITORES</a>
+                <a href="paginas/programacao.html" class="btn btn-secondary" id="btnProgramacao">ACESSE A PROGRAMAÇÃO</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO PLANTA BAIXA / EXPOSITORES -->
+    <section class="expositores-section">
+        <div class="container">
+            <div class="expositores-header">
+                <div class="circle-image-wrapper">
+                    <img src="assets/media/expositores.png" alt="Expositores Natal Hair" class="circle-img">
+                </div>
+                <h2 class="section-title">Localize os expositores</h2>
+                <a href="assets/media/planta.pdf" download class="btn btn-download">
+                    <i class="fa-solid fa-file-pdf"></i> Baixar planta em PDF
+                </a>
+            </div>
+
+            <!-- Imagem da Planta Baixa -->
+            <div class="planta-wrapper">
+                <img src="assets/media/planta.png" alt="Planta baixa da feira Natal Hair" class="planta-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ DA PÁGINA -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            
+            <!-- Coluna 1: Logo e Marca -->
+            <div class="footer-col footer-brand">
+                <img src="logo.png" alt="Natal Hair" class="footer-logo">
+                <p class="footer-slogan">BELEZA SUSTENTÁVEL</p>
+                <p class="footer-dates">23 e 24 de agosto de 2026<br>Natal Shopping</p>
+            </div>
+
+            <!-- Coluna 2: Menu Navegue -->
+            <div class="footer-col footer-links">
+                <h3 class="footer-title">Navegue</h3>
+                <ul>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="paginas/ingressos.html">Ingressos</a></li>
+                    <li><a href="paginas/caravanas.html">Caravanas</a></li>
+                    <li><a href="paginas/embaixadoras.html">Embaixadoras</a></li>
+                    <li><a href="paginas/seja-uma-embaixadora.html">Seja uma embaixadora</a></li>
+                    <li><a href="paginas/expositores.html">Expositores</a></li>
+                    <li><a href="paginas/seja-um-expositor.html">Seja um expositor</a></li>
+                    <li><a href="paginas/politica-de-privacidade.html">Política de Privacidade</a></li>
+                    <li><a href="paginas/cronograma.html">Cronograma de atividades</a></li>
+                    <li><a href="paginas/outros-eventos.html">Outros eventos</a></li>
+                    <li><a href="paginas/nossa-equipe.html">Nossa equipe</a></li>
+                    <li><a href="paginas/nossa-historia.html">Nossa história</a></li>
+                    <li><a href="paginas/noticias.html">Notícias</a></li>
+                </ul>
+            </div>
+
+            <!-- Coluna 3: Redes e Contato -->
+            <div class="footer-col footer-social">
+                <a href="https://wa.me/5584999999999" target="_blank" rel="noopener noreferrer" class="btn-social btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i> Contate-nos
+                </a>
+                <a href="https://instagram.com/natalhair" target="_blank" rel="noopener noreferrer" class="btn-social btn-instagram">
+                    <i class="fa-brands fa-instagram"></i> Acompanhe-nos
+                </a>
+            </div>
+        </div>
+
+        <!-- Linha Inferior do Rodapé -->
+        <div class="footer-bottom">
+            <div class="container footer-bottom-content">
+                <span>&copy; 2026 Natal Hair. Todos os direitos reservados.</span>
+                <div class="dev-credits">
+                    <span>Desenvolvido por</span>
+                    <img src="assets/media/devlogo.png" alt="Desenvolvedor Logo" class="dev-logo">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOTÃO FLUTUANTE DO WHATSAPP -->
+    <a href="https://wa.me/5584994601460" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Contato via WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+</html>
