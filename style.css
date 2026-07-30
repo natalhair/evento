@@ -1,45 +1,36 @@
 /* ==========================================
    RESET & VARIÁVEIS GLOBAIS
    ========================================== */
-:root {
-    --bg-dark: #3b030a;
-    --bg-darker: #240105;
-    --primary-red: #d1121d;
-    --primary-red-hover: #a30b14;
-    --text-white: #ffffff;
-    --text-muted: #e0e0e0;
-    --whatsapp-green: #25d366;
-    --instagram-bg: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --sidebar-width: 300px;
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden;
-    font-family: var(--font-main);
-    background-color: var(--bg-dark);
-    color: var(--text-white);
-    line-height: 1.5;
+:root {
+    --primary-red: #e60000;
+    --dark-red: #800000;
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --grad-red-black: linear-gradient(135deg, #000000 0%, #cc0000 100%);
+    --grad-text-red-black: linear-gradient(180deg, #000000 0%, #e60000 100%);
 }
 
-/* Container Responsivo Generico */
-.container {
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* ==========================================
-   MENU SIDEBAR & OVERLAY
+   SIDEBAR & OVERLAY
    ========================================== */
 .sidebar-overlay {
     position: fixed;
@@ -47,487 +38,76 @@ html, body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.6);
     z-index: 998;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+    display: none;
 }
 
 .sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
+    display: block;
 }
 
 .sidebar {
     position: fixed;
     top: 0;
-    left: calc(-1 * var(--sidebar-width));
-    width: var(--sidebar-width);
+    right: -320px;
+    width: 300px;
     height: 100vh;
-    background-color: var(--bg-darker);
+    background-color: var(--black);
+    color: var(--white);
     z-index: 999;
-    overflow-y: auto;
-    transition: left 0.3s ease;
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease;
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
 }
 
-.sidebar.open {
-    left: 0;
+.sidebar.active {
+    right: 0;
+}
+
+.close-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 2rem;
+    cursor: pointer;
 }
 
 .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .sidebar-logo {
-    max-height: 45px;
-    width: auto;
-}
-
-.close-sidebar-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-white);
-    font-size: 1.8rem;
-    cursor: pointer;
+    max-width: 150px;
+    height: auto;
 }
 
 .sidebar-nav {
-    padding: 20px;
-}
-
-.sidebar-nav h3 {
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-    color: var(--primary-red);
-}
-
-.sidebar-nav ul {
-    list-style: none;
-}
-
-.sidebar-nav li {
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .sidebar-nav a {
-    color: var(--text-muted);
-    text-decoration: none;
+    color: #cccccc;
     font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 6px;
-    transition: background 0.2s ease, color 0.2s ease;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
 }
 
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
+.sidebar-nav a:hover, .sidebar-nav a.active {
     background-color: var(--primary-red);
-    color: var(--text-white);
+    color: var(--white);
 }
 
 /* ==========================================
-   CABEÇALHO DA PÁGINA
-   ========================================== */
-.main-header {
-    position: relative;
-    width: 100%;
-    background-color: var(--bg-darker);
-}
-
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 25px;
-    position: relative;
-    z-index: 10;
-    background-color: rgba(36, 1, 5, 0.95);
-}
-
-/* Botão Hambúrguer em Círculo */
-.menu-circle-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: #ffffff;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.menu-circle-btn:hover {
-    transform: scale(1.05);
-}
-
-.hamburger-lines {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 20px;
-}
-
-.hamburger-lines span {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background-color: var(--bg-darker);
-    border-radius: 2px;
-}
-
-/* Logo Central */
-.header-logo-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.header-logo {
-    max-height: 55px;
-    width: auto;
-}
-
-.header-subtitle {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    margin-top: 4px;
-    color: #f0f0f0;
-    font-weight: 600;
-}
-
-/* Botão de Localização */
-.location-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #ffffff;
-    color: var(--bg-darker);
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s ease;
-}
-
-.location-btn:hover {
-    transform: translateY(-2px);
-}
-
-.location-btn i {
-    color: var(--primary-red);
-    font-size: 1.2rem;
-}
-
-/* Conteúdo de Vídeo */
-.header-video-container {
-    position: relative;
-    width: 100%;
-    max-height: 350px;
-    overflow: hidden;
-}
-
-.header-video {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-    display: block;
-}
-
-.video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(36,1,5,0.4), var(--bg-dark));
-}
-
-/* ==========================================
-   SEÇÃO BANNER / HERO
-   ========================================== */
-.hero-section {
-    padding: 40px 0 60px;
-    text-align: center;
-}
-
-.brand-title {
-    font-size: 3rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-    color: var(--text-white);
-    text-transform: uppercase;
-}
-
-.hero-description {
-    max-width: 700px;
-    margin: 0 auto 35px;
-    font-size: 1.2rem;
-    color: var(--text-muted);
-}
-
-.hero-actions {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-/* Botões Padrão */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 14px 28px;
-    border-radius: 6px;
-    font-weight: 700;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: none;
-}
-
-.btn-primary {
-    background-color: var(--primary-red);
-    color: var(--text-white);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-red-hover);
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background-color: #ffffff;
-    color: var(--bg-darker);
-}
-
-.btn-secondary:hover {
-    background-color: #f0f0f0;
-    transform: translateY(-2px);
-}
-
-/* ==========================================
-   SEÇÃO PLANTA BAIXA / EXPOSITORES
-   ========================================== */
-.expositores-section {
-    padding: 50px 0;
-    background-color: var(--bg-darker);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.expositores-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.circle-image-wrapper {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-.circle-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.btn-download {
-    background-color: #ffffff;
-    color: var(--bg-darker);
-}
-
-.btn-download:hover {
-    background-color: #e0e0e0;
-}
-
-.planta-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    background-color: #ffffff;
-    padding: 10px;
-}
-
-.planta-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-}
-
-/* ==========================================
-   RODAPÉ
-   ========================================== */
-.main-footer {
-    background-color: #170003;
-    padding: 60px 0 0;
-    border-top: 2px solid var(--primary-red);
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px;
-    padding-bottom: 50px;
-}
-
-.footer-col {
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-logo {
-    max-width: 160px;
-    margin-bottom: 10px;
-}
-
-.footer-slogan {
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--primary-red);
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-}
-
-.footer-dates {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.footer-title {
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-    position: relative;
-    padding-bottom: 8px;
-}
-
-.footer-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 40px;
-    height: 3px;
-    background-color: var(--primary-red);
-}
-
-.footer-links ul {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.footer-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
-}
-
-.footer-links a:hover {
-    color: var(--primary-red);
-}
-
-.footer-social {
-    gap: 15px;
-    justify-content: center;
-}
-
-.btn-social {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: transform 0.2s ease;
-}
-
-.btn-social:hover {
-    transform: translateY(-2px);
-}
-
-.btn-whatsapp {
-    background-color: var(--whatsapp-green);
-}
-
-.btn-instagram {
-    background: var(--instagram-bg);
-}
-
-/* Linha Final do Rodapé */
-.footer-bottom {
-    background-color: #0d0002;
-    padding: 20px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.footer-bottom-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.dev-credits {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.dev-logo {
-    max-height: 25px;
-    width: auto;
-}
-
-/* ==========================================
-   BOTÃO FLUTUANTE WHATSAPP
+   WHATSAPP FLOATING BUTTON
    ========================================== */
 .whatsapp-float {
     position: fixed;
@@ -535,17 +115,16 @@ html, body {
     right: 25px;
     width: 60px;
     height: 60px;
-    background-color: var(--whatsapp-green);
-    color: #ffffff;
+    background-color: #25d366;
+    color: var(--white);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    z-index: 990;
-    text-decoration: none;
-    transition: transform 0.2s ease, background 0.2s ease;
+    font-size: 32px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 900;
+    transition: transform 0.2s;
 }
 
 .whatsapp-float:hover {
@@ -553,47 +132,467 @@ html, body {
 }
 
 /* ==========================================
-   RESPONSIVIDADE (MEDIA QUERIES)
+   HEADER / HERO VIDEO
    ========================================== */
-@media (max-width: 768px) {
-    .top-bar {
-        padding: 12px 15px;
-    }
+.hero-header {
+    position: relative;
+    width: 100%;
+    background-color: var(--white);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    .location-btn span {
-        display: none; /* Em telas menores, exibe apenas o ícone do mapa se necessário */
-    }
+.hamburger-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    z-index: 100;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
 
-    .location-btn {
-        padding: 10px;
-        border-radius: 50%;
-    }
+.hamburger-circle {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
 
-    .brand-title {
-        font-size: 2.2rem;
-    }
+.hamburger-circle span {
+    width: 22px;
+    height: 3px;
+    background-color: #000;
+    border-radius: 2px;
+}
 
-    .hero-description {
-        font-size: 1rem;
-    }
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    height: 75vh;
+    min-height: 450px;
+    border-radius: 24px;
+    overflow: hidden;
+}
 
-    .hero-actions {
+.bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.header-logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 220px;
+    width: 40%;
+    z-index: 3;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Octágono do Cabeçalho */
+.event-badge-oct {
+    position: relative;
+    margin-top: -35px;
+    align-self: flex-start;
+    margin-left: 5%;
+    z-index: 10;
+    background-color: var(--white);
+    padding: 12px 30px;
+    filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.25));
+    clip-path: polygon(18px 0%, calc(100% - 18px) 0%, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0% 50%);
+    display: inline-block;
+}
+
+.badge-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #111;
+}
+
+.badge-content i {
+    color: var(--primary-red);
+    font-size: 1.1rem;
+}
+
+/* ==========================================
+   SEÇÃO 2: INTRODUÇÃO
+   ========================================== */
+.intro-section {
+    display: flex;
+    width: 100%;
+    min-height: 80vh;
+    background-color: var(--white);
+    padding: 40px 0 40px 5%;
+    align-items: center;
+}
+
+.intro-left {
+    width: 35%;
+    padding-right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.logo-black {
+    max-width: 200px;
+    filter: brightness(0);
+}
+
+.intro-description {
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.intro-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Botões Octogonais Degradê Vermelho/Preto */
+.btn-oct-red {
+    background: var(--grad-red-black);
+    color: var(--white);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 15px 100%, 0% 50%);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-oct-red:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+.btn-oct-red i {
+    font-size: 1.3rem;
+}
+
+.intro-right {
+    width: 65%;
+    height: 75vh;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.flush-right-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* ==========================================
+   SEÇÃO 3: PLANTA BAIXA
+   ========================================== */
+.planta-section {
+    display: flex;
+    width: 100%;
+    min-height: 85vh;
+}
+
+.planta-left {
+    width: 50%;
+    background: var(--grad-red-black);
+    color: var(--white);
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 18px;
+}
+
+.planta-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.planta-subtitle {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+
+.circle-img-wrapper {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+}
+
+.circle-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Botão Pílula Texto Degradê */
+.btn-pill-white {
+    background-color: var(--white);
+    padding: 16px 36px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.btn-pill-white:hover {
+    transform: scale(1.03);
+}
+
+.btn-pill-white i {
+    color: var(--primary-red);
+    font-size: 1.2rem;
+}
+
+.btn-pill-white span {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 1.25rem;
+    background: var(--grad-text-red-black);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+}
+
+.planta-right {
+    width: 50%;
+    background-color: #f4f4f4;
+}
+
+.planta-map-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ==========================================
+   RODAPÉ
+   ========================================== */
+.main-footer {
+    width: 100%;
+    background-color: var(--white);
+    padding-top: 40px;
+}
+
+.footer-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--grad-red-black);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 50px 60px 30px 60px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-col-left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer-logo {
+    max-width: 180px;
+}
+
+.nav-title {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: var(--white);
+    font-size: 1.3rem;
+    margin-top: 10px;
+}
+
+.footer-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-nav-list a {
+    font-family: Arial, sans-serif;
+    color: var(--white);
+    font-size: 0.9rem;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+.footer-nav-list a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.dev-credits {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--white);
+    font-family: Arial, sans-serif;
+    font-size: 0.85rem;
+}
+
+.dev-logo {
+    height: 24px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.footer-col-right {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Botões Octogonais Brancos do Rodapé */
+.footer-oct-btn {
+    background-color: var(--white);
+    padding: 18px 30px;
+    clip-path: polygon(20px 0%, calc(100% - 20px) 0%, 100% 50%, calc(100% - 20px) 100%, 20px 100%, 0% 50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.2s;
+}
+
+.footer-oct-btn:hover {
+    transform: translateY(-3px);
+}
+
+.footer-oct-btn i {
+    font-size: 2rem;
+    color: var(--black);
+}
+
+.footer-oct-btn span {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 1.6rem;
+    background: var(--grad-text-red-black);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+/* ==========================================
+   RESPONSIVIDADE (MOBILE & TABLET)
+   ========================================== */
+@media (max-width: 992px) {
+    .intro-section {
         flex-direction: column;
+        padding: 40px 20px;
+    }
+
+    .intro-left {
         width: 100%;
-        max-width: 320px;
-        margin: 0 auto;
+        padding-right: 0;
     }
 
-    .btn {
+    .intro-right {
         width: 100%;
+        height: 400px;
+        margin-top: 30px;
     }
 
-    .footer-links ul {
-        grid-template-columns: 1fr;
+    .flush-right-img {
+        border-radius: 20px;
     }
 
-    .footer-bottom-content {
+    .planta-section {
         flex-direction: column;
-        text-align: center;
+    }
+
+    .planta-left, .planta-right {
+        width: 100%;
+    }
+
+    .planta-right {
+        height: 400px;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        padding: 40px 25px 30px 25px;
+        gap: 40px;
+    }
+
+    .footer-col-left, .footer-col-right {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .video-container {
+        height: 50vh;
+        min-height: 320px;
+    }
+
+    .event-badge-oct {
+        margin-left: 0;
+        align-self: center;
+        padding: 10px 16px;
+    }
+
+    .badge-content {
+        font-size: 0.8rem;
+        gap: 6px;
+    }
+
+    .btn-oct-red {
+        font-size: 0.85rem;
+        padding: 14px 18px;
+    }
+
+    .footer-oct-btn span {
+        font-size: 1.2rem;
     }
 }
