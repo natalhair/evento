@@ -1,5 +1,5 @@
 // Substitua pela URL da implantação do seu Google Apps Script
-const APPS_SCRIPT_URL = "URL_DO_WEB_APP_DO_APPS_SCRIPT_AQUI";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlCWx_sh6UvRiJhnwjy5wQ_ssdArmj7dFti8Enng_008slkXOFEGzBhZfgtLoxoFIG8A/exec";
 
 // Credenciais e URL do Supabase
 const SUPABASE_URL = "https://viwjlxtxhpjlrijpnjcl.supabase.co";
