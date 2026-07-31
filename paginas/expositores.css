@@ -111,6 +111,26 @@
     grid-row: span 2;
 }
 
+.story-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: auto; /* Empurra o rodapé para a base do card verso */
+}
+
+.story-instagram {
+    color: #0000ff; /* Azul solicitado */
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
+
+.story-author {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
 /* Responsividade Mobile - Ajuste do Grid */
 @media (max-width: 600px) {
     .page-title {
