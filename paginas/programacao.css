@@ -1,0 +1,152 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS - PROGRAMAÇÃO
+   ========================================== */
+
+.inner-header {
+    width: 100%;
+    background: var(--grad-red-black);
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inner-logo {
+    max-width: 140px;
+}
+
+.programacao-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 40px auto 80px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.programacao-title-area {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.8rem;
+    color: var(--black);
+    margin-bottom: 12px;
+}
+
+.page-subtitle {
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #444;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+}
+
+/* Botão de Download do PDF */
+.btn-download-pdf {
+    background: var(--grad-red-black);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(230, 20, 20, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-download-pdf:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(230, 20, 20, 0.5);
+}
+
+/* Estrutura da Programação */
+.programacao-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.dia-bloco {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.dia-titulo {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.8rem;
+    color: #b91c1c;
+    border-bottom: 2px solid #b91c1c;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.local-bloco {
+    margin-bottom: 20px;
+}
+
+.local-titulo {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #111;
+    background: #f3f4f6;
+    padding: 8px 12px;
+    border-left: 4px solid #111;
+    margin-bottom: 12px;
+}
+
+.evento-item {
+    display: flex;
+    gap: 15px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 0.95rem;
+}
+
+.evento-item:last-child {
+    border-bottom: none;
+}
+
+.evento-horario {
+    font-weight: bold;
+    color: #b91c1c;
+    min-width: 130px;
+}
+
+.evento-descricao {
+    color: #333;
+    flex: 1;
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    padding: 40px;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 600px) {
+    .page-title {
+        font-size: 2rem;
+    }
+    .evento-item {
+        flex-direction: column;
+        gap: 4px;
+    }
+    .evento-horario {
+        min-width: auto;
+    }
+}
