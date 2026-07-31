@@ -3,8 +3,8 @@ class SiteFooter extends HTMLElement {
         this.innerHTML = `
             <style>
                 .main-footer {
-                    background-color: var(--black, #111);
-                    color: var(--white, #fff);
+                    background-color: #ffffff;
+                    color: #ffffff;
                     width: 100%;
                     font-family: Arial, sans-serif;
                 }
@@ -48,7 +48,7 @@ class SiteFooter extends HTMLElement {
                     color: #888;
                 }
                 .dev-logo {
-                    height: 25px;
+                    height: 40px;
                 }
                 .footer-col-right {
                     display: flex;
@@ -60,8 +60,7 @@ class SiteFooter extends HTMLElement {
                     display: flex;
                     align-items: center;
                     gap: 10px;
-                    background: #222;
-                    color: #fff;
+                    background: #ffffff;
                     padding: 10px 20px;
                     border-radius: 8px;
                     text-decoration: none;
