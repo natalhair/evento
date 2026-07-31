@@ -270,6 +270,27 @@
 .hidden {
     display: none !important;
 }
+/* Botão de Download do QR Code (Preto e Branco) */
+.btn-download-qr {
+    margin-top: 14px;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-download-qr:hover {
+    background-color: #222222;
+    transform: scale(1.02);
+}
 
 @media (max-width: 600px) {
     .page-title { font-size: 2rem; }
