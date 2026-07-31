@@ -178,16 +178,24 @@ a {
     position: relative;
     width: 100%;
     max-width: 1400px;
-    height: 75vh;
-    min-height: 450px;
+    /* Força o container a ter exatamente a proporção do YouTube, eliminando bordas */
+    aspect-ratio: 16 / 9; 
     border-radius: 24px;
     overflow: hidden;
+    background-color: #000;
 }
 
 .bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    border: none;
+    /* Opcional: Se quiser esconder o título e logo do YouTube logo de cara, 
+       descomente a linha abaixo. Isso dá um "zoom" sutil no vídeo, 
+       escondendo as extremidades onde a interface do YouTube aparece. */
+    /* transform: scale(1.15); */
 }
 
 .gradient-overlay {
@@ -571,10 +579,6 @@ a {
 }
 
 @media (max-width: 576px) {
-    .video-container {
-        height: 50vh;
-        min-height: 320px;
-    }
 
     .event-badge-oct {
         margin-left: 0;
