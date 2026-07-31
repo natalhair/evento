@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             card.className = `flip-card ${tamanhoAleatorio}`;
 
             const instagramHtml = instagram 
-        ? `<a href="https://instagram.com/${instagram}" target="_blank" class="story-instagram">@${instagram}</a>` 
-        : '';
+                ? `<a href="https://instagram.com/${instagram}" target="_blank" class="story-instagram">@${instagram}</a>` 
+                : '';
             
             card.innerHTML = `
                 <div class="flip-card-inner">
@@ -53,9 +53,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="flip-card-back">
                         <p class="story-text">"${historia}"</p>
                         <div class="story-footer">
-                    ${instagramHtml}
-                    <div class="story-author">- ${primeiraPalavraNome}, ${cidade}.</div>
-                </div>
+                            ${instagramHtml}
+                            <div class="story-author">- ${primeiraPalavraNome}, ${cidade}.</div>
+                        </div>
                     </div>
                 </div>
             `;
