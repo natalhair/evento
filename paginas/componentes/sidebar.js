@@ -134,23 +134,11 @@ class SiteSidebar extends HTMLElement {
             sidebarOverlay.classList.remove("active");
             document.body.style.overflow = "";
         }
+document.addEventListener("toggle-sidebar", openSidebar);
 
-        // Abre o menu 
-        document.addEventListener("click", (e) => {
-            if (e.target.closest("#open-menu")) {
-                openSidebar();
-            }
-        });
-        
-        // Mantém os eventos para fechar (que estão dentro do próprio componente sidebar)
         if (closeMenuBtn) closeMenuBtn.addEventListener("click", closeSidebar);
         if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
-        // Fecha a sidebar ao clicar em qualquer link de navegação interno
-        const navLinks = this.querySelectorAll(".sidebar-nav a");
-        navLinks.forEach(link => {
-            link.addEventListener("click", closeSidebar);
-        });
         const navLinks = this.querySelectorAll(".sidebar-nav a");
         navLinks.forEach(link => {
             link.addEventListener("click", closeSidebar);
