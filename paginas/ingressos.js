@@ -1,7 +1,7 @@
 // 1. Inicialização do Supabase Client
 const SUPABASE_URL = 'https://viwjlxtxhpjlrijpnjcl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_2hXR0A_7bJp6qyGAtD5aLw_oFufu2Lq';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Elementos da DOM
 const cpfInput = document.getElementById('cpf');
@@ -46,7 +46,7 @@ cpfInput.addEventListener('input', async (e) => {
         cpfStatusMsg.textContent = 'Buscando cadastro...';
 
         try {
-            const { data, error } = await _supabase
+            const { data, error } = await supabaseClient
                 .from('users')
                 .select('*')
                 .eq('cpf', cleanCpf)
@@ -113,7 +113,7 @@ btnPay.addEventListener('click', async () => {
     try {
         // Se for um novo usuário, cadastra no banco de dados
         if (!isExistingUser) {
-            const { error } = await _supabase
+            const { error } = await supabaseClient
                 .from('users')
                 .insert([
                     { cpf: cleanCpf, fullname, numberphone, city, uf }
@@ -175,7 +175,7 @@ btnShowTicket.addEventListener('click', async () => {
         btnShowTicket.innerText = 'Gerando Ingresso...';
 
         // Atualiza a coluna "ingresso" na tabela users no Supabase
-        const { error } = await _supabase
+        const { error } = await supabaseClient
             .from('users')
             .update({ ingresso: pendingTicketCode })
             .eq('cpf', pendingCpf);
@@ -213,4 +213,67 @@ btnShowTicket.addEventListener('click', async () => {
     } catch (err) {
         console.error('Erro ao gerar ingresso final:', err);
     }
+});
+
+// Reference do botão de download do QR Code
+const btnDownloadQr = document.getElementById('btn-download-qr');
+
+btnDownloadQr.addEventListener('click', () => {
+    const qrContainer = document.getElementById('qrcode-container');
+    const qrElement = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
+
+    if (!qrElement) {
+        alert('QR Code ainda não gerado.');
+        return;
+    }
+
+    // Obtém o DataURL do QR Code
+    let qrDataUrl = '';
+    if (qrElement.tagName.toLowerCase() === 'img') {
+        qrDataUrl = qrElement.src;
+    } else {
+        qrDataUrl = qrElement.toDataURL('image/png');
+    }
+
+    // Cria um Canvas invisível em memória para desenhar o PNG final
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const canvasWidth = 400;
+    const canvasHeight = 480;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // 1. Preenche fundo BRANCO
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    // 2. Desenha a moldura PRETA externa
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, canvasWidth - 24, canvasHeight - 24);
+
+    // 3. Escreve o texto "Ingresso NatalHair 2026" em PRETO
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 22px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Ingresso NatalHair 2026', canvasWidth / 2, 60);
+
+    // 4. Desenha o QR Code centralizado abaixo do texto
+    const img = new Image();
+    img.onload = () => {
+        const qrSize = 280;
+        const qrX = (canvasWidth - qrSize) / 2;
+        const qrY = 95;
+
+        ctx.drawImage(img, qrX, qrY, qrSize, qrSize);
+
+        // 5. Gera e dispara o download do arquivo PNG
+        const link = document.createElement('a');
+        link.download = 'Ingresso-NatalHair-2026.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    };
+
+    img.src = qrDataUrl;
 });
