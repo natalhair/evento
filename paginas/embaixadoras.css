@@ -16,15 +16,15 @@
 .embaixadoras-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    grid-auto-rows: 220px; /* Define a altura base para o cálculo das linhas do mosaico */
+    grid-auto-rows: 20px; /* Define a altura base para o cálculo das linhas do mosaico */
     gap: 20px;
     grid-auto-flow: dense; /* Faz os cards menores preencherem os espaços vazios deixados pelos maiores */
 }
 
 /* Variações de tamanhos geradas aleatoriamente no carregamento (removido o min-height fixo) */
-.card-size-small { grid-row: span 1; }
-.card-size-medium { grid-row: span 2; }
-.card-size-large { grid-row: span 3; }
+.card-size-small { grid-row: span 6; }
+.card-size-medium { grid-row: span 10; }
+.card-size-large { grid-row: span 15; }
 
 /* Estrutura do Flip Card 3D */
 .flip-card {
