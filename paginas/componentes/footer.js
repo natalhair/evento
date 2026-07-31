@@ -50,6 +50,10 @@ class SiteFooter extends HTMLElement {
                 .dev-logo {
                     height: 40px;
                 }
+                .footer-col-left {
+                    display: flex;
+                    flex-direction: column;
+                }
                 .footer-col-right {
                     display: flex;
                     flex-direction: column;
@@ -70,15 +74,35 @@ class SiteFooter extends HTMLElement {
                     background: #f0f0f0;
                 }
 
-                /* Responsividade enviada */
+                /* Responsividade Mobile */
                 @media (max-width: 768px) {
                     .footer-container {
                         flex-direction: column;
                         padding: 40px 25px 30px 25px;
-                        gap: 40px;
+                        gap: 30px;
                     }
                     .footer-col-left, .footer-col-right {
                         width: 100%;
+                    }
+                    /* Reorganiza a ordem visual no mobile via CSS Grid/Flex se necessário, 
+                       ou dividimos em blocos: O .footer-col-right vai para cima e o dev-credits fica por último */
+                    .footer-container {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    /* Joga os botões de contato para o topo/meio, logo abaixo da navegação e antes do dev-credits */
+                    .footer-col-right {
+                        order: 2;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                    }
+                    .footer-col-left {
+                        order: 1;
+                    }
+                    .dev-credits {
+                        order: 3;
+                        margin-top: 15px;
                     }
                 }
             </style>
@@ -102,12 +126,6 @@ class SiteFooter extends HTMLElement {
                             <li><a href="noticias.html">Notícias</a></li>
                             <li><a href="programacao.html">Programação</a></li>
                         </ul>
-                         <div class="dev-credits">
-                            <span>Desenvolvido por</span>
-                            <a href="https://micadevsparkles.github.io/mywork" target="_blank">
-                                <img src="../assets/media/devlogo.png" alt="MicaDev" class="dev-logo">
-                            </a>
-                        </div>
                     </div>
 
                     <div class="footer-col-right">
@@ -118,6 +136,13 @@ class SiteFooter extends HTMLElement {
                         <a href="https://instagram.com/fafamedeiros_natalhair" target="_blank" class="footer-oct-btn">
                             <i class="fa-brands fa-instagram"></i>
                             <span>Acompanhe-nos</span>
+                        </a>
+                    </div>
+
+                    <div class="dev-credits">
+                        <span>Desenvolvido por</span>
+                        <a href="https://micadevsparkles.github.io/mywork" target="_blank">
+                            <img src="../assets/media/devlogo.png" alt="MicaDev" class="dev-logo">
                         </a>
                     </div>
                 </div>
