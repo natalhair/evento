@@ -67,7 +67,7 @@ class SiteFooter extends HTMLElement {
                     transition: background 0.3s;
                 }
                 .footer-oct-btn:hover {
-                    background: var(--primary-red, #b91c1c);
+                    background: #f0f0f0;
                 }
 
                 /* Responsividade enviada */
@@ -102,12 +102,6 @@ class SiteFooter extends HTMLElement {
                             <li><a href="noticias.html">Notícias</a></li>
                             <li><a href="programacao.html">Programação</a></li>
                         </ul>
-                        <div class="dev-credits">
-                            <span>Desenvolvido por</span>
-                            <a href="https://micadevsparkles.github.io/mywork" target="_blank">
-                                <img src="../assets/media/devlogo.png" alt="MicaDev" class="dev-logo">
-                            </a>
-                        </div>
                     </div>
 
                     <div class="footer-col-right">
@@ -121,6 +115,12 @@ class SiteFooter extends HTMLElement {
                         </a>
                     </div>
                 </div>
+                <div class="dev-credits">
+                            <span>Desenvolvido por</span>
+                            <a href="https://micadevsparkles.github.io/mywork" target="_blank">
+                                <img src="../assets/media/devlogo.png" alt="MicaDev" class="dev-logo">
+                            </a>
+                        </div>
             </footer>
         `;
     }
