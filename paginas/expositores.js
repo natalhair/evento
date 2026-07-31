@@ -50,6 +50,13 @@ async function carregarExpositores() {
             // Sorteia um tamanho aleatório para o card
             const tamanhoAleatorio = tamanhos[Math.floor(Math.random() * tamanhos.length)];
             card.classList.add(tamanhoAleatorio);
+          // Insere a imagem no card
+            const logoImg = document.createElement('img');
+            logoImg.src = `../expositores/${expo.img}`;
+            logoImg.alt = 'Logo Expositor';
+            logoImg.loading = 'lazy';
+
+            card.appendChild(logoImg);
 
             // Evento de clique abrindo numa nova janela
             card.addEventListener('click', () => {
