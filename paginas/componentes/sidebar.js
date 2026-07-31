@@ -118,11 +118,10 @@ class SiteSidebar extends HTMLElement {
             </a>
         `;
 
-        // Referências
-        const openMenuBtn = document.getElementById("open-menu"); // Botão que fica no header da página
-        const closeMenuBtn = document.getElementById("close-menu");
-        const sidebar = document.getElementById("sidebar");
-        const sidebarOverlay = document.getElementById("sidebar-overlay");
+        // Referências dos Elementos
+        const closeMenuBtn = this.querySelector("#close-menu");
+        const sidebar = this.querySelector("#sidebar");
+        const sidebarOverlay = this.querySelector("#sidebar-overlay");
 
         function openSidebar() {
             sidebar.classList.add("active");
@@ -136,10 +135,22 @@ class SiteSidebar extends HTMLElement {
             document.body.style.overflow = "";
         }
 
-        if (openMenuBtn) openMenuBtn.addEventListener("click", openSidebar);
+        // Abre o menu 
+        document.addEventListener("click", (e) => {
+            if (e.target.closest("#open-menu")) {
+                openSidebar();
+            }
+        });
+        
+        // Mantém os eventos para fechar (que estão dentro do próprio componente sidebar)
         if (closeMenuBtn) closeMenuBtn.addEventListener("click", closeSidebar);
         if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
+        // Fecha a sidebar ao clicar em qualquer link de navegação interno
+        const navLinks = this.querySelectorAll(".sidebar-nav a");
+        navLinks.forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
         const navLinks = this.querySelectorAll(".sidebar-nav a");
         navLinks.forEach(link => {
             link.addEventListener("click", closeSidebar);
