@@ -3,7 +3,7 @@ class SiteFooter extends HTMLElement {
         this.innerHTML = `
             <style>
                 .main-footer {
-                    background-color: #ffffff;
+                    background-color: transparent;
                     color: #ffffff;
                     width: 100%;
                     font-family: Arial, sans-serif;
@@ -11,9 +11,17 @@ class SiteFooter extends HTMLElement {
                 .footer-container {
                     display: flex;
                     justify-content: space-between;
+                    align-items: flex-start;
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 40px 25px;
+                    padding: 40px 25px 10px 25px;
+                    flex-wrap: wrap;
+                    gap: 30px;
+                }
+                .footer-col-left {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
                 }
                 .footer-logo {
                     max-width: 150px;
@@ -40,69 +48,69 @@ class SiteFooter extends HTMLElement {
                 .footer-nav-list a:hover {
                     color: var(--primary-red, #b91c1c);
                 }
-                .dev-credits {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-size: 0.9rem;
-                    color: #888;
-                }
-                .dev-logo {
-                    height: 40px;
-                }
-                .footer-col-left {
-                    display: flex;
-                    flex-direction: column;
-                }
                 .footer-col-right {
                     display: flex;
                     flex-direction: column;
                     gap: 15px;
-                    align-items: flex-start;
+                    align-items: center;
                 }
                 .footer-oct-btn {
                     display: flex;
                     align-items: center;
+                    justify-content: center;
                     gap: 10px;
                     background: #ffffff;
-                    padding: 10px 20px;
+                    color: #111111;
+                    padding: 12px 20px;
                     border-radius: 8px;
                     text-decoration: none;
+                    width: 240px; /* Garante que ambos tenham exatamente a mesma largura */
+                    box-sizing: border-box;
+                    font-weight: bold;
                     transition: background 0.3s;
                 }
                 .footer-oct-btn:hover {
                     background: #f0f0f0;
+                }
+                .dev-credits {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    font-size: 0.9rem;
+                    color: #888;
+                    width: 100%;
+                    margin-top: 10px;
+                    padding-bottom: 5px; /* Coladinho com o chão da página */
+                }
+                .dev-logo {
+                    height: 35px;
                 }
 
                 /* Responsividade Mobile */
                 @media (max-width: 768px) {
                     .footer-container {
                         flex-direction: column;
-                        padding: 40px 25px 30px 25px;
-                        gap: 30px;
-                    }
-                    .footer-col-left, .footer-col-right {
-                        width: 100%;
-                    }
-                    /* Reorganiza a ordem visual no mobile via CSS Grid/Flex se necessário, 
-                       ou dividimos em blocos: O .footer-col-right vai para cima e o dev-credits fica por último */
-                    .footer-container {
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    /* Joga os botões de contato para o topo/meio, logo abaixo da navegação e antes do dev-credits */
-                    .footer-col-right {
-                        order: 2;
-                        flex-direction: row;
-                        flex-wrap: wrap;
-                        gap: 10px;
+                        align-items: center;
+                        text-align: center;
+                        padding: 30px 20px 5px 20px;
+                        gap: 25px;
                     }
                     .footer-col-left {
-                        order: 1;
+                        align-items: center;
+                        width: 100%;
+                    }
+                    .footer-col-right {
+                        width: 100%;
+                        align-items: center;
+                    }
+                    .footer-oct-btn {
+                        width: 100%;
+                        max-width: 280px; /* Mesma largura para os dois botões no mobile */
                     }
                     .dev-credits {
-                        order: 3;
-                        margin-top: 15px;
+                        margin-top: 5px;
+                        padding-bottom: 0;
                     }
                 }
             </style>
