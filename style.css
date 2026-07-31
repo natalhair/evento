@@ -479,13 +479,15 @@ a {
 }
 
 .dev-credits {
-    margin-top: 25px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: var(--white);
-    font-family: Arial, sans-serif;
-    font-size: 0.85rem;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #888;
+    width: 100%;
+    margin-top: 10px;
+    padding-bottom: 5px;
 }
 
 .dev-logo {
@@ -504,13 +506,19 @@ a {
 
 /* Botões Octogonais Brancos do Rodapé */
 .footer-oct-btn {
-    background-color: var(--white);
-    padding: 18px 30px;
-    clip-path: polygon(20px 0%, calc(100% - 20px) 0%, 100% 50%, calc(100% - 20px) 100%, 20px 100%, 0% 50%);
     display: flex;
     align-items: center;
-    gap: 20px;
-    transition: transform 0.2s;
+    justify-content: center;
+    gap: 10px;
+    background: #ffffff;
+    color: #111111;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    width: 240px; /* Mantém os dois botões com exatamente o mesmo tamanho no desktop */
+    box-sizing: border-box;
+    font-weight: bold;
+    transition: background 0.3s;
 }
 
 .footer-oct-btn:hover {
