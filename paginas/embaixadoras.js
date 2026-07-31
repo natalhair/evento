@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const nomeCompleto = emb.nome || "Embaixadora";
             const primeiraPalavraNome = nomeCompleto.split(" ")[0];
             const cidade = emb.cidade || "Cidade não informada";
+            const instagram = emb.instagram ? emb.instagram.trim().replace(/^@/, '') : "";
             const historia = emb.historia || "História não informada.";
             const imagem = emb.img || "https://via.placeholder.com/150";
 
@@ -39,6 +40,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             const card = document.createElement("div");
             card.className = `flip-card ${tamanhoAleatorio}`;
 
+            const instagramHtml = instagram 
+        ? `<a href="https://instagram.com/${instagram}" target="_blank" class="story-instagram">@${instagram}</a>` 
+        : '';
+            
             card.innerHTML = `
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
@@ -47,7 +52,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
                     <div class="flip-card-back">
                         <p class="story-text">"${historia}"</p>
-                        <div class="story-author">- ${primeiraPalavraNome}, ${cidade}.</div>
+                        <div class="story-footer">
+                    ${instagramHtml}
+                    <div class="story-author">- ${primeiraPalavraNome}, ${cidade}.</div>
+                </div>
                     </div>
                 </div>
             `;
