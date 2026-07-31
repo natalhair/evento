@@ -70,11 +70,24 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSubmit.textContent = "Enviando...";
         formMensagem.textContent = "";
 
+        const whatsappLimpo = document.getElementById("whatsapp").value.replace(/\D/g, '');
+
+        if (whatsappLimpo.length !== 11) {
+            formMensagem.textContent = "O WhatsApp deve conter exatamente 11 dígitos (DDD + número).";
+            formMensagem.style.color = "#dc2626";
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Enviar Cadastro";
+            return;
+        }
+
         const dadosForm = {
             nome: document.getElementById("nome").value.trim(),
             cidade: document.getElementById("cidade").value.trim(),
             uf: document.getElementById("uf").value.trim().toUpperCase(),
             cpf_cnpj: document.getElementById("cpf_cnpj").value.trim(),
+            whatsapp: whatsappLimpo,
+            email: document.getElementById("email").value.trim(),
+            instagram: document.getElementById("instagram").value.trim().replace(/^@/, ''),
             historia: document.getElementById("historia").value.trim(),
             img: hiddenImgUrl.value
         };
