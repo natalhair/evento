@@ -102,6 +102,12 @@ class SiteFooter extends HTMLElement {
                             <li><a href="noticias.html">Notícias</a></li>
                             <li><a href="programacao.html">Programação</a></li>
                         </ul>
+                         <div class="dev-credits">
+                            <span>Desenvolvido por</span>
+                            <a href="https://micadevsparkles.github.io/mywork" target="_blank">
+                                <img src="../assets/media/devlogo.png" alt="MicaDev" class="dev-logo">
+                            </a>
+                        </div>
                     </div>
 
                     <div class="footer-col-right">
@@ -114,12 +120,6 @@ class SiteFooter extends HTMLElement {
                             <span>Acompanhe-nos</span>
                         </a>
                     </div>
-                    <div class="dev-credits">
-                            <span>Desenvolvido por</span>
-                            <a href="https://micadevsparkles.github.io/mywork" target="_blank">
-                                <img src="../assets/media/devlogo.png" alt="MicaDev" class="dev-logo">
-                            </a>
-                        </div>
                 </div>
             </footer>
         `;
