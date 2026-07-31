@@ -151,11 +151,12 @@
 /* --- RODAPÉ DO VERSO (Instagram + Autor) --- */
 .story-footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Coloca o Instagram acima do nome */
+    align-items: flex-end; /* Empurra ambos para a direita */
     width: 100%;
-    margin-top: auto; /* Empurra o rodapé para a base do card */
-    padding-top: 15px; /* Dá um respiro da história */
+    margin-top: auto;
+    padding-top: 15px;
+    gap: 8px;
 }
 
 .story-instagram {
@@ -171,4 +172,43 @@
     font-weight: bold;
     color: #555;
     margin: 0;
+    text-align: right; /* Garante o alinhamento correto do texto do autor */
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 600px) {
+    .embaixadoras-grid {
+        /* Força exatamente 2 colunas (grid) na versão mobile */
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px; /* Reduz o espaço entre os cards para caber melhor na tela */
+    }
+
+    /* Reduz o espaçamento interno para maximizar o espaço do conteúdo */
+    .flip-card-front, 
+    .flip-card-back {
+        padding: 12px;
+    }
+
+    /* Reduz as imagens para não transbordarem nos cards mais estreitos do celular */
+    .flip-card.card-size-large .flip-card-front img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .flip-card.card-size-medium .flip-card-front img {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Ajusta as fontes do verso para que a história caiba bem no celular */
+    .flip-card.card-size-large .story-text,
+    .flip-card.card-size-medium .story-text,
+    .flip-card.card-size-small .story-text {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    .story-author, .story-instagram {
+        font-size: 0.8rem;
+    }
 }
