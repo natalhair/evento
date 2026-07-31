@@ -29,6 +29,12 @@ class SiteHeader extends HTMLElement {
                 </button>
             </header>
         `;
+        const btn = this.querySelector("#open-menu");
+        if (btn) {
+            btn.addEventListener("click", () => {
+                document.dispatchEvent(new CustomEvent("toggle-sidebar"));
+            });
+        }
     }
 }
 customElements.define('site-header', SiteHeader);
