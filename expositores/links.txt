@@ -28,3 +28,4 @@
 28.png = https://instagram.com/capellycosmeticos;
 29.png = https://instagram.com/exuberantecosmetics;
 30.png = https://instagram.com/anuarcosmeticos;
+31.png = https://instagram.com/lizzeequipamentos
