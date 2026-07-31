@@ -51,11 +51,6 @@ async function carregarExpositores() {
             const tamanhoAleatorio = tamanhos[Math.floor(Math.random() * tamanhos.length)];
             card.classList.add(tamanhoAleatorio);
 
-            // Aplica a logo centralizada por cima do gradiente de preto e vermelho
-            card.style.background = `url('../expositores/${expo.img}'), var(--grad-red-black)`;
-            card.style.backgroundRepeat = 'no-repeat';
-            card.style.backgroundPosition = 'center';
-            card.style.backgroundSize = '80%';
             // Evento de clique abrindo numa nova janela
             card.addEventListener('click', () => {
                 let urlFinal = expo.link;
