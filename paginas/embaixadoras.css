@@ -180,8 +180,13 @@
     .embaixadoras-grid {
         /* Força exatamente 2 colunas (grid) na versão mobile */
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px; /* Reduz o espaço entre os cards para caber melhor na tela */
+        gap: 12px;
     }
+
+    /* Reduz drasticamente a altura dos cards no celular para matar o espaço em branco */
+    .card-size-small { grid-row: span 6; }  /* Altura aproximada: 180px */
+    .card-size-medium { grid-row: span 8; } /* Altura aproximada: 240px */
+    .card-size-large { grid-row: span 10; } /* Altura aproximada: 300px */
 
     /* Reduz o espaçamento interno para maximizar o espaço do conteúdo */
     .flip-card-front, 
@@ -189,7 +194,7 @@
         padding: 12px;
     }
 
-    /* Reduz as imagens para não transbordarem nos cards mais estreitos do celular */
+    /* Reduz as imagens para não transbordarem nos cards */
     .flip-card.card-size-large .flip-card-front img {
         width: 100px;
         height: 100px;
@@ -200,15 +205,31 @@
         height: 80px;
     }
 
-    /* Ajusta as fontes do verso para que a história caiba bem no celular */
+    .flip-card.card-size-small .flip-card-front img {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Ajusta as fontes do verso e frente */
+    .flip-card.card-size-large .flip-card-front h3,
+    .flip-card.card-size-medium .flip-card-front h3,
+    .flip-card.card-size-small .flip-card-front h3 {
+        font-size: 1.1rem;
+    }
+
     .flip-card.card-size-large .story-text,
     .flip-card.card-size-medium .story-text,
     .flip-card.card-size-small .story-text {
         font-size: 0.85rem;
-        line-height: 1.4;
+        line-height: 1.3;
     }
     
-    .story-author, .story-instagram {
+    .story-author {
         font-size: 0.8rem;
+    }
+
+    .story-instagram {
+        font-size: 0.8rem;
+        word-break: break-word; /* Se o @ for muito longo, ele quebra a linha em vez de vazar pro lado */
     }
 }
