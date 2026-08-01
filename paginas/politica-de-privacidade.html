@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade - Natal Hair</title>
+
+    <!-- FontAwesome para ícones (necessário para o footer/header) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Biblioteca Marked.js para converter o Markdown em HTML dinamicamente -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Scripts de Componentes Globais (Ajuste os nomes se necessário) -->
+    <script src="../header.js" defer></script> 
+    <script src="../sidebar.js" defer></script> 
+    <script src="footer.js" defer></script>
+
+    <style>
+        /* --- ESTILOS GERAIS --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- CONTAINER DA POLÍTICA --- */
+        .policy-main {
+            flex: 1;
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .policy-card {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* --- ESTILIZAÇÃO DO CONTEÚDO MARKDOWN --- */
+        #markdown-content h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 2.5rem;
+            color: #111;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        #markdown-content h2 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.5rem;
+            color: var(--primary-red, #b91c1c);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        #markdown-content p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        #markdown-content ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        #markdown-content li {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        #markdown-content strong {
+            color: #111;
+        }
+
+        #markdown-content hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 30px 0;
+        }
+
+        /* Loading / Erro */
+        .status-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+        }
+        .error-message {
+            color: #dc2626;
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 768px) {
+            .policy-card {
+                padding: 30px 20px;
+            }
+            #markdown-content h1 {
+                font-size: 2rem;
+            }
+            #markdown-content h2 {
+                font-size: 1.3rem;
+            }
+            #markdown-content p, #markdown-content li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho e Sidebar (Substitua pelas tags corretas do seu projeto caso sejam diferentes) -->
+    <site-header></site-header>
+    <site-sidebar></site-sidebar>
+
+    <!-- Conteúdo Principal -->
+    <main class="policy-main">
+        <div class="policy-card">
+            <div id="markdown-content">
+                <p class="status-message">Carregando Política de Privacidade...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé (Utilizando o script e tag que criamos anteriormente) -->
+    <site-footer></site-footer>
+
+    <!-- Script de Processamento do Markdown -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const contentDiv = document.getElementById("markdown-content");
+            
+            try {
+                // Como o html e o txt estão na mesma pasta (paginas/), usamos o caminho direto
+                const response = await fetch("privacipolicy.txt");
+                
+                if (!response.ok) {
+                    throw new Error("Não foi possível carregar o arquivo.");
+                }
+                
+                const markdownText = await response.text();
+                
+                // Converte o Markdown para HTML usando a biblioteca Marked.js
+                const htmlContent = marked.parse(markdownText);
+                
+                // Injeta o HTML resultante na div
+                contentDiv.innerHTML = htmlContent;
+                
+            } catch (error) {
+                console.error("Erro ao carregar a política de privacidade:", error);
+                contentDiv.innerHTML = `<p class="status-message error-message">Erro ao carregar a política de privacidade. Por favor, tente novamente mais tarde.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
