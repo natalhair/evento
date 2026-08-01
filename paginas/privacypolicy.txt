@@ -1,0 +1,27 @@
+# Política de Privacidade
+
+A sua privacidade é de extrema importância para nós do **Natal Hair**. Esta Política de Privacidade descreve de forma clara e transparente como coletamos, utilizamos, armazenamos e protegemos as suas informações, em total conformidade com a **Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)**.
+
+## 1. Coleta e Finalidade dos Dados
+Coletamos apenas os dados estritamente necessários para a realização, organização e participação no evento (como nome, contatos, CPF/CNPJ e informações profissionais ou biográficas para embaixadoras e expositores). 
+* **Finalidade exclusiva:** As informações fornecidas são utilizadas unicamente para gerenciar inscrições, credenciamento, comunicação oficial sobre o evento e prestação dos serviços associados.
+
+## 2. Segurança e Não Comercialização de Dados
+Garantimos que os seus dados pessoais **não serão vendidos, alugados ou negociados** com terceiros sob nenhuma hipótese. 
+* Adotamos medidas técnicas e administrativas rigorosas para manter as suas informações em segurança contra acessos não autorizados, perdas ou alterações indevidas.
+
+## 3. Processamento Seguro de Pagamentos
+As transações financeiras e pagamentos realizados no âmbito do evento são processados por meio da plataforma **InfinitePay**, garantindo um ambiente criptografado e seguro para os seus dados bancários e transacionais.
+* Para reforçar a segurança das operações e validar a sua identidade, o processo conta com **autenticação por WhatsApp ou SMS**, assegurando que apenas você realize transações em seu nome.
+
+## 4. Retenção e Exclusão de Dados
+Em respeito ao princípio da minimização e ao ciclo de vida dos dados, **todas as informações coletadas para este evento serão deletadas dos nossos bancos de dados após o encerramento do evento**.
+* Devido a essa política de exclusão definitiva, para participar de edições futuras, **será necessário realizar um novo cadastro** quando o próximo evento for aberto.
+
+## 5. Seus Direitos conforme a LGPD
+Como titular dos dados, você tem o direito de solicitar a qualquer momento:
+* A confirmação da existência de tratamento de dados;
+* O acesso aos seus dados;
+* A correção de dados incompletos, inexatos ou desatualizados.
+
+Em caso de dúvidas sobre esta política ou sobre o tratamento das suas informações, entre em contato conosco através dos nossos canais oficiais de atendimento disponíveis no rodapé do site.
