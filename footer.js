@@ -122,17 +122,17 @@ class SiteFooter extends HTMLElement {
                         <h3 class="nav-title">Navegue</h3>
                         <ul class="footer-nav-list">
                             <li><a href="index.html">Página Inicial</a></li>
-                            <li><a href="ingressos.html">Ingressos</a></li>
-                            <li><a href="embaixadoras.html">Embaixadoras</a></li>
-                            <li><a href="seja-uma-embaixadora.html">Seja uma embaixadora</a></li>
-                            <li><a href="expositores.html">Expositores</a></li>
-                            <li><a href="seja-um-expositor.html">Seja um expositor</a></li>
-                            <li><a href="politica-de-privacidade.html">Política de Privacidade</a></li>
-                            <li><a href="outros-eventos.html">Outros eventos</a></li>
-                            <li><a href="nossa-equipe.html">Nossa equipe</a></li>
-                            <li><a href="nossa-historia.html">Nossa história</a></li>
-                            <li><a href="noticias.html">Notícias</a></li>
-                            <li><a href="programacao.html">Programação</a></li>
+                            <li><a href="paginas/ingressos.html">Ingressos</a></li>
+                            <li><a href="paginas/embaixadoras.html">Embaixadoras</a></li>
+                            <li><a href="paginas/seja-uma-embaixadora.html">Seja uma embaixadora</a></li>
+                            <li><a href="paginas/expositores.html">Expositores</a></li>
+                            <li><a href="paginas/seja-um-expositor.html">Seja um expositor</a></li>
+                            <li><a href="paginas/politica-de-privacidade.html">Política de Privacidade</a></li>
+                            <li><a href="paginas/outros-eventos.html">Outros eventos</a></li>
+                            <li><a href="paginas/nossa-equipe.html">Nossa equipe</a></li>
+                            <li><a href="paginas/nossa-historia.html">Nossa história</a></li>
+                            <li><a href="paginas/noticias.html">Notícias</a></li>
+                            <li><a href="paginas/programacao.html">Programação</a></li>
                         </ul>
                     </div>
 
