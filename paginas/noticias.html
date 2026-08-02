@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias - Natal Hair</title>
+
+    <!-- FontAwesome para ícones (necessário para o footer/header) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Script oficial do Instagram para Embeds -->
+    <script async src="https://www.instagram.com/embed.js"></script>
+
+    <!-- Scripts de Componentes Globais -->
+    <script src="../header.js" defer></script> 
+    <script src="../sidebar.js" defer></script> 
+    <script src="footer.js" defer></script>
+
+    <style>
+        /* --- ESTILOS GERAIS --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .noticias-main {
+            flex: 1;
+            padding: 40px 20px 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .page-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 2.5rem;
+            color: #111;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        /* --- GRID DO FEED DE NOTÍCIAS --- */
+        .feed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            justify-items: center; /* Centraliza os posts dentro das colunas */
+        }
+
+        /* Loading / Mensagens */
+        .status-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #eaeaea;
+            width: 100%;
+        }
+
+        .error-message {
+            color: #dc2626;
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            .feed-grid {
+                grid-template-columns: 1fr; /* Coluna única no celular */
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho e Sidebar -->
+    <site-header></site-header>
+    <site-sidebar></site-sidebar>
+
+    <!-- Conteúdo Principal -->
+    <main class="noticias-main">
+        <h1 class="page-title">Notícias e Novidades</h1>
+        <p class="page-subtitle">Acompanhe as últimas publicações e atualizações do evento.</p>
+        
+        <div id="feed-container" class="feed-grid">
+            <p class="status-message">Carregando o feed de notícias...</p>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <site-footer></site-footer>
+
+    <!-- Lógica de Leitura e Renderização do Feed -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.getElementById("feed-container");
+            
+            try {
+                // Lê o arquivo txt que está na mesma pasta
+                const response = await fetch("noticias.txt");
+                
+                if (!response.ok) {
+                    throw new Error("Não foi possível carregar o arquivo de notícias.");
+                }
+                
+                const text = await response.text();
+                
+                // Separa os links por quebra de linha, remove espaços em branco e ignora linhas vazias
+                const links = text.split('\n')
+                                  .map(link => link.trim())
+                                  .filter(link => link.length > 0 && link.includes("instagram.com"));
+                
+                if (links.length === 0) {
+                    container.innerHTML = `<p class="status-message">Nenhuma publicação disponível no momento.</p>`;
+                    return;
+                }
+
+                // Limpa a mensagem de carregamento
+                container.innerHTML = "";
+
+                // Cria o HTML do embed para cada link
+                links.forEach(link => {
+                    const blockquote = document.createElement('blockquote');
+                    blockquote.className = 'instagram-media';
+                    blockquote.setAttribute('data-instgrm-permalink', link);
+                    blockquote.setAttribute('data-instgrm-version', '14');
+                    
+                    // Estilos base de fallback (caso o script do Insta demore a carregar)
+                    blockquote.style.background = '#FFF';
+                    blockquote.style.border = '0';
+                    blockquote.style.borderRadius = '3px';
+                    blockquote.style.boxShadow = '0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)';
+                    blockquote.style.margin = '1px';
+                    blockquote.style.maxWidth = '540px';
+                    blockquote.style.minWidth = '326px';
+                    blockquote.style.padding = '0';
+                    blockquote.style.width = '100%';
+
+                    container.appendChild(blockquote);
+                });
+
+                // Como injetamos os posts dinamicamente, precisamos "avisar" a biblioteca do Instagram
+                // para escanear a página novamente e transformar as tags <blockquote> em posts visuais.
+                setTimeout(() => {
+                    if (window.instgrm) {
+                        window.instgrm.Embeds.process();
+                    }
+                }, 500); // Um leve atraso para garantir que o DOM inseriu os elementos
+
+            } catch (error) {
+                console.error("Erro ao carregar o feed:", error);
+                container.innerHTML = `<p class="status-message error-message">Erro ao carregar o feed de notícias. Tente novamente mais tarde.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
