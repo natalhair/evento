@@ -1,0 +1,72 @@
+/* --- ESTILOS GERAIS --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o footer fique lá embaixo mesmo sem conteúdo */
+}
+
+.noticias-main {
+    flex: 1;
+    padding: 40px 20px 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.5rem;
+    color: #111;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+/* --- GRID DO FEED DE NOTÍCIAS --- */
+.feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    justify-items: center;
+}
+
+/* Avisos (Carregando / Erro) */
+.status-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    font-style: italic;
+    padding: 40px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #eaeaea;
+    width: 100%;
+}
+
+.error-message {
+    color: #dc2626;
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem;
+    }
+    .feed-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
