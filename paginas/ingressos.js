@@ -137,7 +137,7 @@ btnPay.addEventListener('click', async () => {
 
         // Payload para criar o link via API da InfinitePay com redirect_url incluso no payload
         const payloadInfinitePay = {
-            handle: "audaces",
+            handle: "fafa_medeiros_",
             items: [
                 {
                     description: "Ingresso NatalHair 2026",
