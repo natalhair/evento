@@ -171,9 +171,33 @@ btnShowTicket.addEventListener('click', async () => {
     if (!pendingCpf || !pendingTicketCode) return;
 
     try {
+        const originalBtnText = btnShowTicket.innerText;
         btnShowTicket.disabled = true;
-        btnShowTicket.innerText = 'Gerando Ingresso...';
+        btnShowTicket.innerText = 'Verificando pagamento...';
 
+        // === NOVA VERIFICAÇÃO DE PAGAMENTO ===
+        const { data: userData, error: checkError } = await supabaseClient
+            .from('users')
+            .select('pagamento')
+            .eq('cpf', pendingCpf)
+            .maybeSingle();
+
+        if (checkError) {
+            console.error('Erro ao checar status do pagamento:', checkError);
+            alert('Erro ao conectar com o banco de dados. Tente novamente.');
+            btnShowTicket.disabled = false;
+            btnShowTicket.innerText = originalBtnText;
+            return;
+        }
+
+        // Se não for 'pago', barra a geração do ingresso e exibe aviso
+        if (!userData || userData.pagamento !== 'pago') {
+            alert('Seu pagamento ainda está sendo processado ou não foi aprovado. Por favor, aguarde mais alguns instantes e tente novamente.');
+            btnShowTicket.disabled = false;
+            btnShowTicket.innerText = originalBtnText;
+            return; 
+        }
+        // ======================================
         // Atualiza a coluna "ingresso" na tabela users no Supabase
         const { error } = await supabaseClient
             .from('users')
