@@ -136,7 +136,7 @@ btnPay.addEventListener('click', async () => {
         localStorage.setItem('user_fullname', fullname);
 
         // Redireciona para o checkout do InfinitePay
-        const infinitePayUrl = 'https://checkout.infinitepay.io/fafa_medeiros_?items=[{"name":"Ingresso%20NatalHair%202026","price":2500,"quantity":1}]&redirect_url=https://natalhair.github.io/evento/pages/ingressos.html';
+        const infinitePayUrl = 'https://checkout.infinitepay.io/audaces?items=[{"name":"Ingresso%20NatalHair%202026","price":2500,"quantity":1}]&redirect_url=https://natalhair.github.io/evento/pages/ingressos.html';
         window.location.href = infinitePayUrl;
 
     } catch (err) {
