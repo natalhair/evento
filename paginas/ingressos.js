@@ -343,7 +343,10 @@ btnDownloadQr.addEventListener('click', () => {
         const link = document.createElement('a');
         link.download = 'Ingresso-NatalHair-2026.png';
         link.href = canvas.toDataURL('image/png');
+        
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
     };
 
     img.src = qrDataUrl;
