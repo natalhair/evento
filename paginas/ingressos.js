@@ -135,7 +135,7 @@ btnPay.addEventListener('click', async () => {
         localStorage.setItem('checkout_timestamp', checkoutTime);
         localStorage.setItem('user_fullname', fullname);
 
-        // Payload para criar o link via API da InfinitePay (mantendo o webhook_url)
+        // Payload para criar o link via API da InfinitePay com redirect_url incluso no payload
         const payloadInfinitePay = {
             handle: "audaces",
             items: [
@@ -146,7 +146,8 @@ btnPay.addEventListener('click', async () => {
                 }
             ],
             order_nsu: cleanCpf,
-            webhook_url: "https://viwjlxtxhpjlrijpnjcl.supabase.co/functions/v1/super-responder"
+            webhook_url: "https://viwjlxtxhpjlrijpnjcl.supabase.co/functions/v1/super-responder",
+            redirect_url: "https://natalhair.github.io/evento/paginas/ingressos.html"
         };
 
         const originalText = btnPay.innerText;
@@ -169,10 +170,7 @@ btnPay.addEventListener('click', async () => {
         let checkoutUrl = data.url || data.link || (data.data && data.data.url);
 
         if (checkoutUrl) {
-            // Insere manualmente o redirect_url correto com a pasta 'paginas' no final do link retornado
-            checkoutUrl += '&redirect_url=https://natalhair.github.io/evento/paginas/ingressos.html';
-
-            // Redireciona para o checkout ajustado
+            // Redireciona para o checkout gerado corretamente pela API
             window.location.href = checkoutUrl;
         } else {
             console.error("Resposta da InfinitePay sem URL:", data);
@@ -245,7 +243,7 @@ btnShowTicket.addEventListener('click', async () => {
         
         btnShowTicket.innerText = 'Gerando Ingresso...';
 
-        // Atualiza a coluna "ingresso" na tabela users no Supabase
+        // Atualiza a coluna "ingresso" na tabela users no Supabase com o código em cache
         const { error } = await supabaseClient
             .from('users')
             .update({ ingresso: pendingTicketCode })
@@ -291,19 +289,19 @@ const btnDownloadQr = document.getElementById('btn-download-qr');
 
 btnDownloadQr.addEventListener('click', () => {
     const qrContainer = document.getElementById('qrcode-container');
-    const qrElement = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
+    const qrImg = qrContainer.querySelector('img');
+    const qrCanvas = qrContainer.querySelector('canvas');
 
-    if (!qrElement) {
+    let qrDataUrl = '';
+    
+    // Assegura captura correta baseado em como o qrcode.js renderiza na DOM
+    if (qrImg && qrImg.src && qrImg.src.startsWith('data:image')) {
+        qrDataUrl = qrImg.src;
+    } else if (qrCanvas) {
+        qrDataUrl = qrCanvas.toDataURL('image/png');
+    } else {
         alert('QR Code ainda não gerado.');
         return;
-    }
-
-    // Obtém o DataURL do QR Code
-    let qrDataUrl = '';
-    if (qrElement.tagName.toLowerCase() === 'img') {
-        qrDataUrl = qrElement.src;
-    } else {
-        qrDataUrl = qrElement.toDataURL('image/png');
     }
 
     // Cria um Canvas invisível em memória para desenhar o PNG final
@@ -324,11 +322,11 @@ btnDownloadQr.addEventListener('click', () => {
     ctx.lineWidth = 4;
     ctx.strokeRect(12, 12, canvasWidth - 24, canvasHeight - 24);
 
-    // 3. Escreve o texto "Ingresso NatalHair 2026" em PRETO
+    // 3. Escreve o texto "Ingresso natalhair 2026" em PRETO
     ctx.fillStyle = '#000000';
     ctx.font = 'bold 22px Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Ingresso NatalHair 2026', canvasWidth / 2, 60);
+    ctx.fillText('Ingresso natalhair 2026', canvasWidth / 2, 60);
 
     // 4. Desenha o QR Code centralizado abaixo do texto
     const img = new Image();
@@ -343,10 +341,7 @@ btnDownloadQr.addEventListener('click', () => {
         const link = document.createElement('a');
         link.download = 'Ingresso-NatalHair-2026.png';
         link.href = canvas.toDataURL('image/png');
-        
-        document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
     };
 
     img.src = qrDataUrl;
