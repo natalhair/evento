@@ -137,7 +137,7 @@ btnPay.addEventListener('click', async () => {
 
         // Payload para criar o link via API da InfinitePay (mantendo o webhook_url)
         const payloadInfinitePay = {
-            handle: "fafa_medeiros_",
+            handle: "audaces",
             items: [
                 {
                     description: "Ingresso NatalHair 2026",
