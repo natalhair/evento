@@ -135,32 +135,59 @@ btnPay.addEventListener('click', async () => {
         localStorage.setItem('checkout_timestamp', checkoutTime);
         localStorage.setItem('user_fullname', fullname);
 
-        // Monta a URL final injetando o CPF dinamicamente no ID do carrinho e passando o webhook
-        const infinitePayUrl = `https://checkout.infinitepay.io/audaces?items=[{"id":"${cleanCpf}","name":"Ingresso%20NatalHair%202026","price":2500,"quantity":1}]&redirect_url=https://natalhair.github.io/evento/pages/ingressos.html&webhook_url=https://viwjlxtxhpjlrijpnjcl.supabase.co/functions/v1/super-responder`;
+       // === NOVA INTEGRAÇÃO INFINITEPAY VIA POST ===
+        const payloadInfinitePay = {
+            handle: "audaces", // Sua InfiniteTag sem o $
+            items: [
+                {
+                    description: "Ingresso NatalHair 2026", // Na documentação usa 'description' ao invés de 'name'
+                    quantity: 1,
+                    price: 2500 // 2500 centavos = R$ 25,00
+                }
+            ],
+            order_nsu: cleanCpf, // Aqui vai o CPF para o webhook devolver!
+            redirect_url: "https://natalhair.github.io/evento/pages/ingressos.html",
+            webhook_url: "https://viwjlxtxhpjlrijpnjcl.supabase.co/functions/v1/super-responder"
+        };
 
-        // Redireciona para o checkout
-        window.location.href = infinitePayUrl;
+        // Altera o botão para dar feedback visual de que estamos gerando o link
+        const originalText = btnPay.innerText;
+        btnPay.innerText = "Gerando pagamento...";
+        btnPay.disabled = true;
+
+        // Requisição para criar o link de pagamento
+        const response = await fetch('https://api.checkout.infinitepay.io/links', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payloadInfinitePay)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro na API InfinitePay: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // A InfinitePay normalmente retorna o link criado dentro de data.url ou data.link
+        const checkoutUrl = data.url || data.link || (data.data && data.data.url);
+
+        if (checkoutUrl) {
+            // Redireciona o cliente para o link de pagamento gerado
+            window.location.href = checkoutUrl;
+        } else {
+            console.error("Resposta da InfinitePay sem URL:", data);
+            alert("Erro ao ler o link de pagamento gerado. Verifique o console.");
+            btnPay.innerText = originalText;
+            btnPay.disabled = false;
+        }
 
     } catch (err) {
         console.error('Erro na operação:', err);
-    }
-});
-
-// 4. Checagem ao carregar a página (Verificação de retorno do InfinitePay)
-window.addEventListener('DOMContentLoaded', () => {
-    const pendingCpf = localStorage.getItem('pending_cpf');
-    const pendingTicketCode = localStorage.getItem('pending_ticket_code');
-    const checkoutTimestamp = localStorage.getItem('checkout_timestamp');
-
-    if (pendingCpf && pendingTicketCode && checkoutTimestamp) {
-        const timeElapsed = Date.now() - parseInt(checkoutTimestamp, 10);
-        const ONE_MINUTE_MS = 60000; // 1 minuto em ms
-
-        // Se passou 1 minuto ou mais desde a ida ao checkout
-        if (timeElapsed >= ONE_MINUTE_MS) {
-            checkoutFormContainer.classList.add('hidden');
-            pendingBanner.classList.remove('hidden');
-        }
+        alert('Erro de conexão ao gerar o pagamento. Verifique seu console.');
+        btnPay.innerText = "Finalizar Pagamento";
+        btnPay.disabled = false;
     }
 });
 
