@@ -135,9 +135,29 @@ btnPay.addEventListener('click', async () => {
         localStorage.setItem('checkout_timestamp', checkoutTime);
         localStorage.setItem('user_fullname', fullname);
 
-        // Redireciona para o checkout do InfinitePay
-        const infinitePayUrl = 'https://checkout.infinitepay.io/audaces?items=[{"name":"Ingresso%20NatalHair%202026","price":2500,"quantity":1}]&redirect_url=https://natalhair.github.io/evento/pages/ingressos.html';
-        window.location.href = infinitePayUrl;
+        // 1. Substitua pela URL real da sua Edge Function gerada no Supabase
+const urlDoWebhook = 'https://viwjlxtxhpjlrijpnjcl.supabase.co/functions/v1/super-responder';
+
+// 2. Montamos o carrinho colocando o cleanCpf como "id" do produto!
+const carrinho = [
+    {
+        id: cleanCpf, 
+        name: "Ingresso NatalHair 2026",
+        price: 2500, // R$ 25,00
+        quantity: 1
+    }
+];
+
+// 3. URLs de retorno e webhook encodadas para não quebrarem o link
+const itensCodificados = encodeURIComponent(JSON.stringify(carrinho));
+const urlRetorno = encodeURIComponent('https://natalhair.github.io/evento/pages/ingressos.html');
+const webhookCodificado = encodeURIComponent(urlDoWebhook);
+
+// 4. Monta a URL final com todos os parâmetros exigidos
+const infinitePayUrl = `https://checkout.infinitepay.io/audaces?items=${itensCodificados}&redirect_url=${urlRetorno}&webhook_url=${webhookCodificado}`;
+
+// Redireciona para o checkout
+window.location.href = infinitePayUrl;
 
     } catch (err) {
         console.error('Erro na operação:', err);
