@@ -135,27 +135,24 @@ btnPay.addEventListener('click', async () => {
         localStorage.setItem('checkout_timestamp', checkoutTime);
         localStorage.setItem('user_fullname', fullname);
 
-       // === NOVA INTEGRAÇÃO INFINITEPAY VIA POST ===
+        // Payload para criar o link via API da InfinitePay (mantendo o webhook_url)
         const payloadInfinitePay = {
-            handle: "audaces", // Sua InfiniteTag sem o $
+            handle: "audaces",
             items: [
                 {
-                    description: "Ingresso NatalHair 2026", // Na documentação usa 'description' ao invés de 'name'
+                    description: "Ingresso NatalHair 2026",
                     quantity: 1,
-                    price: 2500 // 2500 centavos = R$ 25,00
+                    price: 2500
                 }
             ],
-            order_nsu: cleanCpf, // Aqui vai o CPF para o webhook devolver!
-            redirect_url: "https://natalhair.github.io/evento/pages/ingressos.html",
+            order_nsu: cleanCpf,
             webhook_url: "https://viwjlxtxhpjlrijpnjcl.supabase.co/functions/v1/super-responder"
         };
 
-        // Altera o botão para dar feedback visual de que estamos gerando o link
         const originalText = btnPay.innerText;
         btnPay.innerText = "Gerando pagamento...";
         btnPay.disabled = true;
 
-        // Requisição para criar o link de pagamento
         const response = await fetch('https://api.checkout.infinitepay.io/links', {
             method: 'POST',
             headers: {
@@ -169,12 +166,13 @@ btnPay.addEventListener('click', async () => {
         }
 
         const data = await response.json();
-        
-        // A InfinitePay normalmente retorna o link criado dentro de data.url ou data.link
-        const checkoutUrl = data.url || data.link || (data.data && data.data.url);
+        let checkoutUrl = data.url || data.link || (data.data && data.data.url);
 
         if (checkoutUrl) {
-            // Redireciona o cliente para o link de pagamento gerado
+            // Insere manualmente o redirect_url correto com a pasta 'paginas' no final do link retornado
+            checkoutUrl += '&redirect_url=https://natalhair.github.io/evento/paginas/ingressos.html';
+
+            // Redireciona para o checkout ajustado
             window.location.href = checkoutUrl;
         } else {
             console.error("Resposta da InfinitePay sem URL:", data);
@@ -188,6 +186,24 @@ btnPay.addEventListener('click', async () => {
         alert('Erro de conexão ao gerar o pagamento. Verifique seu console.');
         btnPay.innerText = "Finalizar Pagamento";
         btnPay.disabled = false;
+    }
+});
+
+// 4. Checagem ao carregar a página (Verificação de retorno do InfinitePay)
+window.addEventListener('DOMContentLoaded', () => {
+    const pendingCpf = localStorage.getItem('pending_cpf');
+    const pendingTicketCode = localStorage.getItem('pending_ticket_code');
+    const checkoutTimestamp = localStorage.getItem('checkout_timestamp');
+
+    if (pendingCpf && pendingTicketCode && checkoutTimestamp) {
+        const timeElapsed = Date.now() - parseInt(checkoutTimestamp, 10);
+        const ONE_MINUTE_MS = 60000; // 1 minuto em ms
+
+        // Se passou 1 minuto ou mais desde a ida ao checkout
+        if (timeElapsed >= ONE_MINUTE_MS) {
+            checkoutFormContainer.classList.add('hidden');
+            pendingBanner.classList.remove('hidden');
+        }
     }
 });
 
