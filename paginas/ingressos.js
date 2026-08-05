@@ -35,6 +35,15 @@ function generateTicketCode() {
     return code;
 }
 
+// Helper: Redireciona para o WhatsApp em caso de erro com mensagem detalhada
+function redirectErrorToWhatsApp(contexto, detalheErro) {
+    const mensagem = `Olá Micael, um cliente enfrentou um erro no sistema de ingressos.\n\n*Contexto do erro:* ${contexto}\n*Detalhe técnico:* ${detalheErro}`;
+    const whatsappUrl = `https://wa.me/5584991000682?text=${encodeURIComponent(mensagem)}`;
+    
+    alert('Ocorreu um erro inesperado no sistema. Você será redirecionado para o nosso suporte no WhatsApp para resolvermos isso na hora.');
+    window.location.href = whatsappUrl;
+}
+
 // 2. Event Listener de verificação do CPF ao digitar
 cpfInput.addEventListener('input', async (e) => {
     const rawValue = e.target.value;
