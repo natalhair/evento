@@ -119,7 +119,7 @@ btnPay.addEventListener('click', async () => {
         return;
     }
 
-   try {
+    try {
         // Gera o código do ingresso agora, logo no início
         const ticketCode = generateTicketCode();
         const checkoutTime = Date.now();
@@ -134,7 +134,7 @@ btnPay.addEventListener('click', async () => {
 
             if (error) {
                 console.error('Erro ao salvar usuário:', error);
-                alert('Erro ao registrar seus dados. Tente novamente.');
+                redirectErrorToWhatsApp('Salvar novo usuário no banco de dados', JSON.stringify(error));
                 return;
             }
         } else {
@@ -146,6 +146,8 @@ btnPay.addEventListener('click', async () => {
             
             if (error) {
                 console.error('Erro ao atualizar ingresso na planilha:', error);
+                redirectErrorToWhatsApp('Atualizar ingresso no banco de dados', JSON.stringify(error));
+                return;
             }
         }
 
@@ -155,7 +157,7 @@ btnPay.addEventListener('click', async () => {
         localStorage.setItem('checkout_timestamp', checkoutTime);
         localStorage.setItem('user_fullname', fullname);
 
-        // Payload para criar o link via API da InfinitePay com redirect_url incluso no payload
+        // Payload para criar o link via API da InfinitePay
         const payloadInfinitePay = {
             handle: "fafa_medeiros_",
             items: [
@@ -183,7 +185,7 @@ btnPay.addEventListener('click', async () => {
         });
 
         if (!response.ok) {
-            throw new Error(`Erro na API InfinitePay: ${response.status}`);
+            throw new Error(`Erro API InfinitePay HTTP: ${response.status}`);
         }
 
         const data = await response.json();
@@ -194,16 +196,12 @@ btnPay.addEventListener('click', async () => {
             window.location.href = checkoutUrl;
         } else {
             console.error("Resposta da InfinitePay sem URL:", data);
-            alert("Erro ao ler o link de pagamento gerado. Verifique o console.");
-            btnPay.innerText = originalText;
-            btnPay.disabled = false;
+            redirectErrorToWhatsApp('Retorno da InfinitePay', 'Link de checkout ausente no payload retornado');
         }
 
     } catch (err) {
         console.error('Erro na operação:', err);
-        alert('Erro de conexão ao gerar o pagamento. Verifique seu console.');
-        btnPay.innerText = "Finalizar Pagamento";
-        btnPay.disabled = false;
+        redirectErrorToWhatsApp('Geração do pagamento / Requisição Fetch', err.message || err);
     }
 });
 
@@ -228,28 +226,25 @@ window.addEventListener('DOMContentLoaded', () => {
 // 5. Clique em "VER MEU INGRESSO"
 btnShowTicket.addEventListener('click', async () => {
     const pendingCpf = localStorage.getItem('pending_cpf');
-    const pendingTicketCode = localStorage.getItem('pending_ticket_code');
     const userFullname = localStorage.getItem('user_fullname') || 'Cliente';
 
-    if (!pendingCpf || !pendingTicketCode) return;
+    if (!pendingCpf) return;
 
     try {
         const originalBtnText = btnShowTicket.innerText;
         btnShowTicket.disabled = true;
         btnShowTicket.innerText = 'Verificando pagamento...';
 
-        // === VERIFICAÇÃO DE PAGAMENTO ===
+        // === VERIFICAÇÃO DE PAGAMENTO E LEITURA DO INGRESSO ===
         const { data: userData, error: checkError } = await supabaseClient
             .from('users')
-            .select('pagamento')
+            .select('pagamento, ingresso')
             .eq('cpf', pendingCpf)
             .maybeSingle();
 
         if (checkError) {
             console.error('Erro ao checar status do pagamento:', checkError);
-            alert('Erro ao conectar com o banco de dados. Tente novamente.');
-            btnShowTicket.disabled = false;
-            btnShowTicket.innerText = originalBtnText;
+            redirectErrorToWhatsApp('Consulta de pagamento no banco de dados', JSON.stringify(checkError));
             return;
         }
 
@@ -263,16 +258,8 @@ btnShowTicket.addEventListener('click', async () => {
         
         btnShowTicket.innerText = 'Gerando Ingresso...';
 
-        // Atualiza a coluna "ingresso" na tabela users no Supabase com o código em cache
-        const { error } = await supabaseClient
-            .from('users')
-            .update({ ingresso: pendingTicketCode })
-            .eq('cpf', pendingCpf);
-
-        if (error) {
-            console.error('Erro ao salvar código do ingresso:', error);
-            alert('Atenção: Houve um erro ao salvar o ingresso no banco, mas seu comprovante será exibido.');
-        }
+        // Usa o ingresso do banco de dados, com fallback para o cache se necessário
+        const finalTicketCode = userData.ingresso || localStorage.getItem('pending_ticket_code');
 
         // Exibe o Card do Ingresso e esconde o Banner
         pendingBanner.classList.add('hidden');
@@ -280,7 +267,7 @@ btnShowTicket.addEventListener('click', async () => {
 
         document.getElementById('ticket-user-name').textContent = userFullname;
         document.getElementById('ticket-user-cpf').textContent = pendingCpf;
-        document.getElementById('ticket-code-display').textContent = pendingTicketCode;
+        document.getElementById('ticket-code-display').textContent = finalTicketCode;
 
         // Gera o QR Code com a informação exclusiva do CPF puro (11 ou 14 dígitos)
         const qrContainer = document.getElementById('qrcode-container');
@@ -301,6 +288,7 @@ btnShowTicket.addEventListener('click', async () => {
 
     } catch (err) {
         console.error('Erro ao gerar ingresso final:', err);
+        redirectErrorToWhatsApp('Renderização do ingresso final na tela', err.message || err);
     }
 });
 
