@@ -110,13 +110,17 @@ btnPay.addEventListener('click', async () => {
         return;
     }
 
-    try {
-        // Se for um novo usuário, cadastra no banco de dados
+   try {
+        // Gera o código do ingresso agora, logo no início
+        const ticketCode = generateTicketCode();
+        const checkoutTime = Date.now();
+
+        // Se for um novo usuário, cadastra no banco de dados JÁ com o ingresso
         if (!isExistingUser) {
             const { error } = await supabaseClient
                 .from('users')
                 .insert([
-                    { cpf: cleanCpf, fullname, numberphone, city, uf }
+                    { cpf: cleanCpf, fullname, numberphone, city, uf, ingresso: ticketCode }
                 ]);
 
             if (error) {
@@ -124,12 +128,19 @@ btnPay.addEventListener('click', async () => {
                 alert('Erro ao registrar seus dados. Tente novamente.');
                 return;
             }
+        } else {
+            // Se o usuário já existe, atualiza a linha dele para garantir que o ingresso fique salvo
+            const { error } = await supabaseClient
+                .from('users')
+                .update({ ingresso: ticketCode })
+                .eq('cpf', cleanCpf);
+            
+            if (error) {
+                console.error('Erro ao atualizar ingresso na planilha:', error);
+            }
         }
 
-        // Gera o código do ingresso e guarda no cache (localStorage)
-        const ticketCode = generateTicketCode();
-        const checkoutTime = Date.now();
-
+        // Guarda no cache (localStorage) para quando a página for recarregada após o pagamento
         localStorage.setItem('pending_cpf', cleanCpf);
         localStorage.setItem('pending_ticket_code', ticketCode);
         localStorage.setItem('checkout_timestamp', checkoutTime);
