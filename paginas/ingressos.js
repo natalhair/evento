@@ -63,11 +63,64 @@ cpfInput.addEventListener('input', async (e) => {
 
             if (error) throw error;
 
-            userDetailsFields.classList.remove('hidden');
-
             if (data) {
-                // Usuário Existe -> Preenche e bloqueia edição
                 isExistingUser = true;
+
+                // --- INÍCIO DA NOVA LÓGICA DE EXIBIÇÃO AUTOMÁTICA DE INGRESSO ---
+                // Verifica se já tem ingresso preenchido OU se o pagamento consta como "pago"
+                if (data.ingresso || data.pagamento === 'pago') {
+                    let finalTicketCode = data.ingresso;
+
+                    // Se não tiver código de ingresso gerado, mas estiver "pago", gera e salva
+                    if (!data.ingresso && data.pagamento === 'pago') {
+                        finalTicketCode = generateTicketCode();
+                        const { error: updateError } = await supabaseClient
+                            .from('users')
+                            .update({ ingresso: finalTicketCode })
+                            .eq('cpf', cleanCpf);
+                        
+                        if (updateError) {
+                            console.error('Erro ao gerar ingresso automático:', updateError);
+                            redirectErrorToWhatsApp('Geração automática de ingresso na busca por CPF', JSON.stringify(updateError));
+                            return;
+                        }
+                    }
+
+                    // Prepara a interface para mostrar o ingresso diretamente
+                    cpfStatusMsg.className = 'status-msg success';
+                    cpfStatusMsg.textContent = 'Pagamento identificado! Carregando seu ingresso...';
+                    
+                    // Oculta os formulários/banners e exibe o cartão do ingresso
+                    if (checkoutFormContainer) checkoutFormContainer.classList.add('hidden');
+                    if (userDetailsFields) userDetailsFields.classList.add('hidden');
+                    if (pendingBanner) pendingBanner.classList.add('hidden');
+                    ticketResultCard.classList.remove('hidden');
+
+                    // Preenche as informações do ingresso
+                    document.getElementById('ticket-user-name').textContent = data.fullname || 'Cliente';
+                    document.getElementById('ticket-user-cpf').textContent = cleanCpf;
+                    document.getElementById('ticket-code-display').textContent = finalTicketCode;
+
+                    // Gera o QR Code com o CPF puro
+                    const qrContainer = document.getElementById('qrcode-container');
+                    qrContainer.innerHTML = ''; 
+                    new QRCode(qrContainer, {
+                        text: cleanCpf,
+                        width: 140,
+                        height: 140,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    // Retorna para encerrar a função e não exibir os campos de checkout
+                    return; 
+                }
+                // --- FIM DA NOVA LÓGICA ---
+
+                // Se o usuário existe, mas AINDA NÃO pagou -> Mostra campos e bloqueia edição
+                userDetailsFields.classList.remove('hidden');
+                
                 fullnameInput.value = data.fullname || '';
                 numberphoneInput.value = data.numberphone || '';
                 cityInput.value = data.city || '';
@@ -79,10 +132,12 @@ cpfInput.addEventListener('input', async (e) => {
                 ufInput.readOnly = true;
 
                 cpfStatusMsg.className = 'status-msg success';
-                cpfStatusMsg.textContent = 'Cadastro encontrado! Verifique seus dados.';
+                cpfStatusMsg.textContent = 'Cadastro encontrado! Prossiga com o pagamento.';
             } else {
-                // Usuário Não Existe -> Limpa e habilita campos
+                // Usuário Não Existe -> Limpa, exibe e habilita campos
                 isExistingUser = false;
+                userDetailsFields.classList.remove('hidden');
+
                 fullnameInput.value = '';
                 numberphoneInput.value = '';
                 cityInput.value = '';
