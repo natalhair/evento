@@ -33,16 +33,17 @@ if (!form || !submitBtn) {
         const city = document.getElementById('city').value.trim();
         const uf = document.getElementById('uf').value;
 
-        // Limpeza de strings
+       // Limpeza de strings
         const cpf = rawCpf.replace(/\D/g, '');
         const phoneDigits = rawPhone.replace(/\D/g, '');
-        const finalPhone = `+55${phoneDigits}`;
+        // Se houver dígitos, formata com +55. Se não, envia null para o banco
+        const finalPhone = phoneDigits.length > 0 ? `+55${phoneDigits}` : null;
 
         // Validações
         const isDocValid = (cpf.length === 11 || cpf.length === 14);
-        // CORREÇÃO: Mínimo 2 letras por palavra
         const isNameValid = rawName.trim().split(/\s+/).length >= 2 && rawName.trim().split(/\s+/).every(w => w.length >= 2);
-        const isPhoneValid = (phoneDigits.length === 11 && phoneDigits.charAt(2) === '9');
+        // Agora o telefone é válido se estiver VAZIO (length === 0) OU se tiver 11 dígitos começando com 9
+        const isPhoneValid = phoneDigits.length === 0 || (phoneDigits.length === 11 && phoneDigits.charAt(2) === '9');
 
         // Exibe/Oculta erros na tela
         document.getElementById('error-cpf').style.display = !isDocValid ? 'block' : 'none';
