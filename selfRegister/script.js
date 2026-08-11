@@ -119,7 +119,7 @@ downloadBtn.addEventListener('click', () => {
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(22);
-    doc.text("INGRESSO VIRTUAL", 105, 25, { align: 'center' });
+    doc.text("INGRESSO NÃO COMPRADO PELO SITE", 105, 25, { align: 'center' });
     doc.setFontSize(14);
     doc.text("Natal Hair 2026", 105, 34, { align: 'center' });
 
