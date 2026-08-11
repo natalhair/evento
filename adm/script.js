@@ -16,13 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================
-// BUSCA E RENDERIZAÇÃO
+// BUSCA E RENDERIZAÇÃO - CHECK-INS
 // ==========================================
 async function carregarDados() {
     try {
         // Busca os dados do Dia 1
-        // Se você configurou a Foreign Key entre cpfEvento e users, 
-        // você poderia usar: .select('*, users(fullname)') para puxar o nome automaticamente
         const resDia1 = await supabaseClient
             .from('natalhair2026_dia_1')
             .select('*, users(fullname)')
@@ -64,8 +62,6 @@ function renderizarTabela(tbodyId, dados) {
     dados.forEach(item => {
         const tr = document.createElement('tr');
         
-        // Pega o nome do usuário. 
-        // Se usar Foreign Key, puxa de item.users.fullname. Senão, puxa da coluna 'name'.
         const nomeUsuario = (item.users && item.users.fullname) ? item.users.fullname : (item.name || 'Nome não identificado');
         
         tr.innerHTML = `
@@ -102,13 +98,11 @@ function gerarPDF(titulo, dados, nomeArquivo) {
         return;
     }
 
-    // Inicializa o jsPDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Estilo do título no PDF
     doc.setFontSize(18);
-    doc.setTextColor(230, 0, 0); // Vermelho
+    doc.setTextColor(230, 0, 0); 
     doc.text("Natal Hair 2026", 14, 20);
     
     doc.setFontSize(12);
@@ -117,7 +111,6 @@ function gerarPDF(titulo, dados, nomeArquivo) {
     doc.text(`Total de registros: ${dados.length}`, 14, 34);
     doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 40);
 
-    // Prepara os dados para a tabela do PDF
     const bodyData = dados.map(item => {
         const nomeUsuario = (item.users && item.users.fullname) ? item.users.fullname : (item.name || 'Nome não identificado');
         return [
@@ -126,17 +119,87 @@ function gerarPDF(titulo, dados, nomeArquivo) {
         ];
     });
 
-    // Gera a tabela no PDF
     doc.autoTable({
         startY: 45,
         head: [['Nome do Participante', 'Data e Hora do Check-in']],
         body: bodyData,
         theme: 'striped',
-        headStyles: { fillColor: [230, 0, 0] }, // Cabeçalho vermelho
+        headStyles: { fillColor: [230, 0, 0] },
         styles: { fontSize: 10 },
         alternateRowStyles: { fillColor: [245, 245, 245] }
     });
 
-    // Baixa o arquivo
     doc.save(nomeArquivo);
+}
+
+// ==========================================
+// MODAL - USUÁRIOS CADASTRADOS
+// ==========================================
+const btnUsuarios = document.getElementById('btn-usuarios');
+const modalUsuarios = document.getElementById('modal-usuarios');
+const closeModal = document.getElementById('close-modal');
+const tbodyUsuarios = document.getElementById('tbody-usuarios');
+const totalUsuarios = document.getElementById('total-usuarios');
+
+// Abrir modal e carregar
+btnUsuarios.addEventListener('click', () => {
+    modalUsuarios.style.display = 'block';
+    carregarUsuarios();
+});
+
+// Fechar pelo botão X
+closeModal.addEventListener('click', () => {
+    modalUsuarios.style.display = 'none';
+});
+
+// Fechar ao clicar fora da janela
+window.addEventListener('click', (event) => {
+    if (event.target === modalUsuarios) {
+        modalUsuarios.style.display = 'none';
+    }
+});
+
+// Função para buscar e renderizar a tabela principal de Users
+async function carregarUsuarios() {
+    tbodyUsuarios.innerHTML = '<tr><td colspan="3" class="loading-text">Buscando usuários no banco de dados...</td></tr>';
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from('users')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Atualiza contagem
+        totalUsuarios.textContent = data.length;
+        tbodyUsuarios.innerHTML = '';
+
+        if (data.length === 0) {
+            tbodyUsuarios.innerHTML = '<tr><td colspan="3" class="loading-text">Nenhum usuário encontrado.</td></tr>';
+            return;
+        }
+
+        // Renderiza cada linha
+        data.forEach(user => {
+            const tr = document.createElement('tr');
+            
+            // Tratamento caso a coluna não venha como esperado. 
+            // Substitua 'email' se a coluna no supabase tiver outro nome.
+            const nome = user.fullname || user.name || 'Sem nome';
+            const email = user.email || 'Sem e-mail';
+            const dataCad = formatarDataHora(user.created_at);
+
+            tr.innerHTML = `
+                <td><strong>${nome}</strong></td>
+                <td>${email}</td>
+                <td>${dataCad}</td>
+            `;
+            tbodyUsuarios.appendChild(tr);
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+        tbodyUsuarios.innerHTML = '<tr><td colspan="3" class="loading-text" style="color: var(--red-vivid);">Falha ao carregar lista de usuários.</td></tr>';
+    }
 }
