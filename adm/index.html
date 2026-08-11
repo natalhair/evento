@@ -17,6 +17,8 @@
             <!-- Substitua pelo caminho real da sua logo, se necessário -->
             <img src="../logo.png" alt="Natal Hair 2026 Logo" class="logo" onerror="this.style.display='none'">
             <h1>Painel de Controle - Relatórios</h1>
+            <!-- NOVO BOTÃO AQUI -->
+            <button id="btn-usuarios" class="btn-secondary">Usuários Cadastrados</button>
         </div>
     </header>
 
@@ -84,6 +86,30 @@
             </div>
         </section>
     </main>
+
+    <!-- JANELA MODAL DE USUÁRIOS -->
+    <div id="modal-usuarios" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <h2 style="margin-bottom: 10px; border-left: 4px solid var(--red-vivid); padding-left: 10px;">Todos os Usuários</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Total cadastrados: <strong id="total-usuarios" style="color: var(--text-main);">0</strong></p>
+            
+            <div class="table-responsive modal-table-container">
+                <table id="table-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Nome Completo</th>
+                            <th>Email</th>
+                            <th>Data de Cadastro</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-usuarios">
+                        <tr><td colspan="3" class="loading-text">Carregando usuários...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
