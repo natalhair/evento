@@ -171,7 +171,7 @@ async function carregarUsuarios() {
     try {
         const { data, error } = await supabaseClient
             .from('users')
-            .select('fullname, numberphone, cpf, city, uf, pagamento')
+            .select('id, fullname, numberphone, cpf, city, uf, pagamento')
             .order('fullname', { ascending: true }); // Ordena os usuários por nome em ordem alfabética
             
         if (error) {
@@ -194,15 +194,27 @@ async function carregarUsuarios() {
             const documento = user.cpf || '-';
             const cidade = user.city || '-';
             const estado = user.uf || '-';
-            const pagamento = user.pagamento || '-';
             
+            const isPago = user.pagamento && user.pagamento.toLowerCase() === 'pago';
+            const userId = user.id || user.cpf;
+
             tr.innerHTML = `
                 <td><strong>${nome}</strong></td>
                 <td>${telefone}</td>
                 <td>${documento}</td>
                 <td>${cidade}</td>
                 <td>${estado}</td>
-                <td>${pagamento}</td>
+                <td>
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" ${isPago ? 'checked' : ''} onchange="alternarPagamento('${userId}', this)">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-status-text" style="color: ${isPago ? '#10b981' : 'var(--text-muted)'}">
+                            ${isPago ? 'Pago' : 'Pendente'}
+                        </span>
+                    </div>
+                </td>
             `;
             tbodyUsuarios.appendChild(tr);
         });
@@ -210,5 +222,45 @@ async function carregarUsuarios() {
     } catch (error) {
         console.error("Erro ao carregar usuários:", error);
         tbodyUsuarios.innerHTML = '<tr><td colspan="6" class="loading-text" style="color: var(--red-vivid);">Ocorreu um erro ao buscar os usuários. Tente novamente.</td></tr>';
+    }
+}
+// ==========================================
+// FUNÇÃO PARA ALTERNAR STATUS DE PAGAMENTO
+// ==========================================
+async function alternarPagamento(identifier, checkbox) {
+    const novoStatus = checkbox.checked ? 'pago' : null;
+    const statusText = checkbox.closest('.switch-container').querySelector('.switch-status-text');
+
+    checkbox.disabled = true;
+
+    try {
+        let query = supabaseClient.from('users').update({ pagamento: novoStatus });
+
+        // Tenta atualizar utilizando o ID ou o CPF
+        if (Number.isInteger(Number(identifier))) {
+            query = query.eq('id', identifier);
+        } else {
+            query = query.eq('cpf', identifier);
+        }
+
+        const { error } = await query;
+
+        if (error) throw error;
+
+        // Atualiza a interface
+        if (novoStatus === 'pago') {
+            statusText.textContent = 'Pago';
+            statusText.style.color = '#10b981';
+        } else {
+            statusText.textContent = 'Pendente';
+            statusText.style.color = 'var(--text-muted)';
+        }
+
+    } catch (error) {
+        console.error('Erro ao atualizar pagamento:', error);
+        alert('Erro ao atualizar o status de pagamento no banco de dados.');
+        checkbox.checked = !checkbox.checked;
+    } finally {
+        checkbox.disabled = false;
     }
 }
