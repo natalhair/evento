@@ -12,6 +12,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
+    <!-- OVERLAY DE AUTENTICAÇÃO -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Acesso Restrito</h2>
+                <p>Digite a senha de administrador para acessar</p>
+            </div>
+            <form id="auth-form">
+                <div class="auth-field">
+                    <input type="password" id="auth-password" placeholder="Sua senha" required autocomplete="current-password">
+                </div>
+                <p id="auth-error" class="auth-error" style="display: none;"></p>
+                <button type="submit" id="auth-btn" class="btn-primary auth-submit-btn">Entrar</button>
+            </form>
+        </div>
+    </div>
     <header class="admin-header">
         <div class="logo-container">
             <!-- Substitua pelo caminho real da sua logo, se necessário -->
