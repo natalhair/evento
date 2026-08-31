@@ -6,9 +6,10 @@ const SUPABASE_ANON_KEY = 'sb_publishable_2hXR0A_7bJp6qyGAtD5aLw_oFufu2Lq';
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Variáveis para armazenar os dados globais para o PDF
+// Variáveis para armazenar os dados globais
 let dadosDia1 = [];
 let dadosDia2 = [];
+let dadosUsuariosFull = [];
 
 // Inicia o carregamento quando a página abre
 document.addEventListener("DOMContentLoaded", () => {
@@ -21,8 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function carregarDados() {
     try {
         // Busca os dados do Dia 1
-        // Se você configurou a Foreign Key entre cpfEvento e users, 
-        // você poderia usar: .select('*, users(fullname)') para puxar o nome automaticamente
         const resDia1 = await supabaseClient
             .from('natalhair2026_dia_1')
             .select('*, users(fullname)')
@@ -64,8 +63,6 @@ function renderizarTabela(tbodyId, dados) {
     dados.forEach(item => {
         const tr = document.createElement('tr');
         
-        // Pega o nome do usuário. 
-        // Se usar Foreign Key, puxa de item.users.fullname. Senão, puxa da coluna 'name'.
         const nomeUsuario = (item.users && item.users.fullname) ? item.users.fullname : (item.name || 'Nome não identificado');
         
         tr.innerHTML = `
@@ -166,7 +163,7 @@ window.addEventListener('click', (e) => {
 });
 
 async function carregarUsuarios() {
-    tbodyUsuarios.innerHTML = '<tr><td colspan="6" class="loading-text">Buscando dados no servidor...</td></tr>';
+    tbodyUsuarios.innerHTML = '<tr><td colspan="7" class="loading-text">Buscando dados no servidor...</td></tr>';
     
     try {
         const { data, error } = await supabaseClient
@@ -181,17 +178,38 @@ async function carregarUsuarios() {
         tbodyUsuarios.innerHTML = '';
         
         if (!data || data.length === 0) {
-            tbodyUsuarios.innerHTML = '<tr><td colspan="6" class="loading-text">Nenhum usuário cadastrado encontrado.</td></tr>';
+            tbodyUsuarios.innerHTML = '<tr><td colspan="7" class="loading-text">Nenhum usuário cadastrado encontrado.</td></tr>';
+            document.getElementById('contador-usuarios').textContent = 'Total: 0';
             return;
         }
+        
+        dadosUsuariosFull = data;
+        document.getElementById('contador-usuarios').textContent = `Total: ${data.length}`;
         
         data.forEach(user => {
             const tr = document.createElement('tr');
             
-            // Tratamento contra valores vazios para não deixar campo quebrado visualmente
             const nome = user.fullname || '-';
             const telefone = user.numberphone || '-';
-            const documento = user.cpf || '-';
+            
+            // Tratamento CPF/CNPJ
+            let docStr = user.cpf ? String(user.cpf) : '';
+            let digits = docStr.replace(/\D/g, '');
+            let cpfVal = '-';
+            let cnpjVal = '-';
+
+            if (digits.length === 11) {
+                cpfVal = docStr;
+            } else if (digits.length === 14) {
+                cnpjVal = docStr;
+            } else if (digits.length > 0 && digits.length < 11) {
+                cpfVal = `${docStr} (CPF INCOMPLETO)`;
+            } else if (digits.length > 11 && digits.length < 14) {
+                cnpjVal = `${docStr} (CNPJ INCOMPLETO)`;
+            } else if (digits.length > 14) {
+                cnpjVal = docStr;
+            }
+
             const cidade = user.city || '-';
             const estado = user.uf || '-';
             
@@ -201,7 +219,8 @@ async function carregarUsuarios() {
             tr.innerHTML = `
                 <td><strong>${nome}</strong></td>
                 <td>${telefone}</td>
-                <td>${documento}</td>
+                <td>${cpfVal}</td>
+                <td>${cnpjVal}</td>
                 <td>${cidade}</td>
                 <td>${estado}</td>
                 <td>
@@ -221,9 +240,10 @@ async function carregarUsuarios() {
 
     } catch (error) {
         console.error("Erro ao carregar usuários:", error);
-        tbodyUsuarios.innerHTML = '<tr><td colspan="6" class="loading-text" style="color: var(--red-vivid);">Ocorreu um erro ao buscar os usuários. Tente novamente.</td></tr>';
+        tbodyUsuarios.innerHTML = '<tr><td colspan="7" class="loading-text" style="color: var(--red-vivid);">Ocorreu um erro ao buscar os usuários. Tente novamente.</td></tr>';
     }
 }
+
 // ==========================================
 // FUNÇÃO PARA ALTERNAR STATUS DE PAGAMENTO
 // ==========================================
@@ -262,5 +282,123 @@ async function alternarPagamento(identifier, checkbox) {
         checkbox.checked = !checkbox.checked;
     } finally {
         checkbox.disabled = false;
+    }
+}
+
+// ==========================================
+// EXPORTAÇÃO DOS USUÁRIOS CADASTRADOS
+// ==========================================
+document.getElementById('btn-export-usuarios').addEventListener('click', () => {
+    if (!dadosUsuariosFull || dadosUsuariosFull.length === 0) {
+        alert("Não há dados de usuários para baixar.");
+        return;
+    }
+
+    const formato = prompt("Qual formato deseja baixar? (pdf, csv ou txt)");
+    if (!formato) return;
+
+    const tipo = formato.trim().toLowerCase();
+    
+    if (tipo === 'pdf' || tipo === 'csv' || tipo === 'txt') {
+        baixarDadosUsuarios(tipo);
+    } else {
+        alert("Formato inválido. Escolha pdf, csv ou txt.");
+    }
+});
+
+function organizarDadosUsuariosParaExportacao() {
+    return dadosUsuariosFull.map(user => {
+        const nome = user.fullname || '-';
+        const telefone = user.numberphone || '-';
+        
+        let docStr = user.cpf ? String(user.cpf) : '';
+        let digits = docStr.replace(/\D/g, '');
+        let cpfVal = '-';
+        let cnpjVal = '-';
+
+        if (digits.length === 11) {
+            cpfVal = docStr;
+        } else if (digits.length === 14) {
+            cnpjVal = docStr;
+        } else if (digits.length > 0 && digits.length < 11) {
+            cpfVal = `${docStr} (CPF INCOMPLETO)`;
+        } else if (digits.length > 11 && digits.length < 14) {
+            cnpjVal = `${docStr} (CNPJ INCOMPLETO)`;
+        } else if (digits.length > 14) {
+            cnpjVal = docStr;
+        }
+
+        const cidade = user.city || '-';
+        const estado = user.uf || '-';
+        const status = (user.pagamento && user.pagamento.toLowerCase() === 'pago') ? 'Pago' : 'Pendente';
+
+        return [nome, telefone, cpfVal, cnpjVal, cidade, estado, status];
+    });
+}
+
+function baixarDadosUsuarios(formato) {
+    const bodyData = organizarDadosUsuariosParaExportacao();
+    const head = ['Nome completo', 'Telefone', 'CPF', 'CNPJ', 'Cidade', 'UF', 'Status Pagamento'];
+
+    if (formato === 'pdf') {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('landscape');
+        
+        doc.setFontSize(16);
+        doc.setTextColor(230, 0, 0);
+        doc.text("Relatório de Usuários Cadastrados - Natal Hair 2026", 14, 20);
+        
+        doc.setFontSize(10);
+        doc.setTextColor(50, 50, 50);
+        doc.text(`Total: ${bodyData.length} | Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 28);
+
+        doc.autoTable({
+            startY: 35,
+            head: [head],
+            body: bodyData,
+            theme: 'striped',
+            headStyles: { fillColor: [230, 0, 0] },
+            styles: { fontSize: 8 },
+            alternateRowStyles: { fillColor: [245, 245, 245] }
+        });
+        doc.save('Usuarios_NatalHair.pdf');
+
+    } else if (formato === 'csv') {
+        let csvContent = head.join(";") + "\n";
+        bodyData.forEach(row => {
+            csvContent += row.map(item => `"${String(item).replace(/"/g, '""')}"`).join(";") + "\n";
+        });
+        
+        // \uFEFF é o BOM para forçar o Excel a ler os caracteres (acentos) corretamente
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Usuarios_NatalHair.csv";
+        link.click();
+        URL.revokeObjectURL(url);
+
+    } else if (formato === 'txt') {
+        let txtContent = "RELATÓRIO DE USUÁRIOS CADASTRADOS - NATAL HAIR 2026\n";
+        txtContent += `Total de registros: ${bodyData.length} | Gerado em: ${new Date().toLocaleString('pt-BR')}\n`;
+        txtContent += "=".repeat(80) + "\n\n";
+
+        bodyData.forEach(row => {
+            txtContent += `Nome: ${row[0]}\n`;
+            txtContent += `Telefone: ${row[1]}\n`;
+            txtContent += `CPF: ${row[2]}\n`;
+            txtContent += `CNPJ: ${row[3]}\n`;
+            txtContent += `Cidade/UF: ${row[4]} - ${row[5]}\n`;
+            txtContent += `Status Pagamento: ${row[6]}\n`;
+            txtContent += "-".repeat(50) + "\n";
+        });
+
+        const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Usuarios_NatalHair.txt";
+        link.click();
+        URL.revokeObjectURL(url);
     }
 }
