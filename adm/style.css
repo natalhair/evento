@@ -367,3 +367,22 @@ input:checked + .slider:before {
     padding: 12px;
     font-size: 1rem;
 }
+/* ==========================================
+   CSS ADICIONAL - HEADER DO MODAL DE USUÁRIOS
+   ========================================== */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.contador-usuarios {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
